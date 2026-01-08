@@ -2,22 +2,44 @@
 
 This document provides step-by-step instructions for AI agents (Claude Code, Gemini CLI, etc.) to set up the Coach Vocabulary Backend development environment from scratch.
 
-## Overview
+## Important Notes for AI Agents
 
-**Goal**: Set up a fully functional development server with seeded data.
-
-**Prerequisites to install if missing**:
-- Python 3.9+ (3.11 recommended)
-- PostgreSQL 14+
-- pip
-
-**Final verification**: `curl http://localhost:8000/health` returns `{"status":"healthy"}`
+1. **Execute commands sequentially** - Each step depends on the previous one
+2. **Verify each step** - Use the verification commands to confirm success before proceeding
+3. **Handle errors** - If a step fails, check the Troubleshooting section
+4. **Platform detection** - Check `uname -s` to determine OS (Darwin=macOS, Linux=Linux)
+5. **Working directory** - All commands assume you are in the repository root directory
 
 ---
 
-## Step 1: Check and Install Prerequisites
+## Step 0: Verify Working Directory
 
-### 1.1 Check Python
+```bash
+# Check current directory contains expected files
+ls -la app/main.py requirements.txt alembic.ini
+```
+
+**Expected**: Files should exist. If not, navigate to the correct directory:
+```bash
+cd /path/to/coach-vocabulary-backend
+```
+
+---
+
+## Step 1: Detect Platform and Check Prerequisites
+
+### 1.1 Detect Operating System
+
+```bash
+uname -s
+```
+
+**Result interpretation**:
+- `Darwin` → macOS
+- `Linux` → Linux
+- For Windows (PowerShell), this command won't work; use `$env:OS` instead
+
+### 1.2 Check Python
 
 ```bash
 python3 --version
@@ -25,74 +47,99 @@ python3 --version
 
 **Expected**: Python 3.9.x or higher
 
-**If not installed or version too old**:
-- macOS: `brew install python@3.11`
-- Ubuntu/Debian: `sudo apt update && sudo apt install python3.11 python3.11-venv python3-pip`
-- Windows: Download from https://www.python.org/downloads/
+**If command fails or version too old**:
 
-### 1.2 Check PostgreSQL
+For macOS:
+```bash
+# Check if Homebrew is installed
+which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Python
+brew install python@3.11
+```
+
+For Linux (Ubuntu/Debian):
+```bash
+sudo apt update && sudo apt install -y python3.11 python3.11-venv python3-pip
+```
+
+### 1.3 Check PostgreSQL
 
 ```bash
-psql --version
+which psql && psql --version
 ```
 
 **Expected**: psql (PostgreSQL) 14.x or higher
 
 **If not installed**:
-- macOS: `brew install postgresql@14 && brew services start postgresql@14`
-- Ubuntu/Debian: `sudo apt update && sudo apt install postgresql postgresql-contrib && sudo systemctl start postgresql`
-- Windows: Download from https://www.postgresql.org/download/windows/
+
+For macOS:
+```bash
+brew install postgresql@14
+brew services start postgresql@14
+```
+
+For Linux (Ubuntu/Debian):
+```bash
+sudo apt update && sudo apt install -y postgresql postgresql-contrib
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+```
 
 **Verify PostgreSQL is running**:
 ```bash
 pg_isready
 ```
 
-**Expected**: `/tmp:5432 - accepting connections` or similar success message
+**Expected**: Message containing `accepting connections`
 
-### 1.3 Check pip
+### 1.4 Check pip
 
 ```bash
-pip3 --version
+python3 -m pip --version
 ```
 
-**Expected**: pip 21.x or higher
-
-**If not installed**:
+**If not available**:
 ```bash
 python3 -m ensurepip --upgrade
 ```
 
 ---
 
-## Step 2: Set Up Python Environment
+## Step 2: Set Up Python Virtual Environment
 
-### 2.1 Create Virtual Environment
+### 2.1 Remove Existing venv (if corrupted)
+
+```bash
+# Only run if venv exists and is corrupted
+[ -d "venv" ] && rm -rf venv
+```
+
+### 2.2 Create Virtual Environment
 
 ```bash
 python3 -m venv venv
 ```
 
-### 2.2 Activate Virtual Environment
+### 2.3 Activate Virtual Environment
 
-**macOS/Linux**:
+For macOS/Linux:
 ```bash
 source venv/bin/activate
 ```
 
-**Windows**:
-```bash
-.\venv\Scripts\activate
-```
-
 **Verify activation**:
 ```bash
-which python
+which python | grep -q "venv" && echo "OK: venv activated" || echo "ERROR: venv not activated"
 ```
 
-**Expected**: Path should contain `venv/bin/python`
+### 2.4 Upgrade pip
 
-### 2.3 Install Dependencies
+```bash
+pip install --upgrade pip
+```
+
+### 2.5 Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -100,10 +147,8 @@ pip install -r requirements.txt
 
 **Verify installation**:
 ```bash
-pip list | grep -E "(fastapi|sqlalchemy|psycopg2)"
+python -c "import fastapi, sqlalchemy, psycopg2; print('OK: All packages installed')"
 ```
-
-**Expected**: Should show fastapi, sqlalchemy, psycopg2-binary
 
 ---
 
@@ -112,39 +157,54 @@ pip list | grep -E "(fastapi|sqlalchemy|psycopg2)"
 ### 3.1 Create .env File
 
 ```bash
-cp .env.example .env
+# Create .env from example (won't overwrite if exists)
+[ ! -f ".env" ] && cp .env.example .env
 ```
 
-### 3.2 Determine Database Connection
+### 3.2 Detect PostgreSQL User and Update .env
 
-**Option A: Using system username (macOS default)**
+**Step A: Try to detect the correct PostgreSQL user**
 
-Check your PostgreSQL user:
 ```bash
-psql -c "SELECT current_user;" postgres 2>/dev/null || psql -c "SELECT current_user;" -U $(whoami) postgres
+# Try connecting with current system user (common on macOS)
+PGUSER=$(whoami)
+if psql -U "$PGUSER" -c "SELECT 1;" postgres >/dev/null 2>&1; then
+    echo "OK: PostgreSQL user is $PGUSER"
+else
+    # Try postgres user
+    PGUSER="postgres"
+    if psql -U "$PGUSER" -c "SELECT 1;" postgres >/dev/null 2>&1; then
+        echo "OK: PostgreSQL user is postgres"
+    else
+        echo "ERROR: Cannot connect to PostgreSQL"
+        exit 1
+    fi
+fi
 ```
 
-If successful, update `.env`:
-```
-DATABASE_URL=postgresql://YOUR_USERNAME@localhost:5432/coach_vocabulary
+**Step B: Update .env with detected user**
+
+```bash
+# For macOS/Linux - update DATABASE_URL with detected user
+PGUSER=$(whoami)
+if psql -U "$PGUSER" -c "SELECT 1;" postgres >/dev/null 2>&1; then
+    # Using system username (no password)
+    sed -i.bak "s|DATABASE_URL=.*|DATABASE_URL=postgresql://${PGUSER}@localhost:5432/coach_vocabulary|" .env
+else
+    # Using postgres user with password (keep default)
+    echo "Using default postgres user configuration"
+fi
 ```
 
-Replace `YOUR_USERNAME` with your actual username (usually your system username on macOS).
-
-**Option B: Using postgres user with password**
-
-If you have a `postgres` user with password, keep the default:
-```
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/coach_vocabulary
-```
+**Note for Linux**: If `sed -i.bak` fails, try `sed -i''` instead.
 
 ### 3.3 Verify .env Content
 
 ```bash
-cat .env
+grep "DATABASE_URL" .env
 ```
 
-**Expected**: Should contain valid DATABASE_URL, HOST, PORT, DEBUG settings
+**Expected**: Should show a valid PostgreSQL connection string
 
 ---
 
@@ -152,22 +212,19 @@ cat .env
 
 ### 4.1 Create Database
 
-**Using your username (macOS)**:
 ```bash
-createdb coach_vocabulary
-```
+# Extract username from DATABASE_URL
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
 
-**Using postgres user**:
-```bash
-createdb -U postgres coach_vocabulary
+# Create database (ignore error if already exists)
+createdb -U "$DB_USER" coach_vocabulary 2>/dev/null || echo "Database may already exist"
 ```
 
 **Verify database exists**:
 ```bash
-psql -l | grep coach_vocabulary
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
+psql -U "$DB_USER" -l | grep -q "coach_vocabulary" && echo "OK: Database exists" || echo "ERROR: Database not found"
 ```
-
-**Expected**: Should show `coach_vocabulary` in the list
 
 ### 4.2 Run Database Migrations
 
@@ -175,17 +232,13 @@ psql -l | grep coach_vocabulary
 alembic upgrade head
 ```
 
-**Expected output**:
-```
-INFO  [alembic.runtime.migration] Running upgrade  -> a93f64b8188d, Initial tables: users, words, word_progress
-```
+**Expected output**: Message containing `Running upgrade`
 
 **Verify tables exist**:
 ```bash
-psql -d coach_vocabulary -c "\dt"
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
+psql -U "$DB_USER" -d coach_vocabulary -c "\dt" | grep -q "words" && echo "OK: Tables created" || echo "ERROR: Tables not found"
 ```
-
-**Expected**: Should show tables: `users`, `words`, `word_progress`, `alembic_version`
 
 ---
 
@@ -193,85 +246,88 @@ psql -d coach_vocabulary -c "\dt"
 
 ### 5.1 Run Seed Script
 
-The seed script processes `words.json`, copies images to `static/images/`, and imports words to the database.
-
 ```bash
 python scripts/seed_words.py --direct
 ```
 
-**Expected output**:
-```
-Processing words and images...
-...
-Processed 214 words
-Images copied: 214
-Importing directly to database...
-Cleared existing words
-Imported: 214, Skipped: 0
-```
+**Expected output**: Should end with `Imported: 214, Skipped: 0`
 
 ### 5.2 Verify Seed Data
 
 ```bash
-psql -d coach_vocabulary -c "SELECT COUNT(*) FROM words;"
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
+WORD_COUNT=$(psql -U "$DB_USER" -d coach_vocabulary -t -c "SELECT COUNT(*) FROM words;")
+[ "$WORD_COUNT" -ge 200 ] && echo "OK: $WORD_COUNT words imported" || echo "ERROR: Only $WORD_COUNT words found"
 ```
-
-**Expected**: `count` should be `214`
 
 ---
 
 ## Step 6: Start Development Server
 
-### 6.1 Start Server
+### 6.1 Start Server in Background
 
 ```bash
-uvicorn app.main:app --reload
+# Kill any existing process on port 8000
+lsof -ti:8000 | xargs kill -9 2>/dev/null || true
+
+# Start server in background
+nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > /tmp/uvicorn.log 2>&1 &
+
+# Wait for server to start
+sleep 3
 ```
 
-**Expected output**:
-```
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process
-```
-
-### 6.2 Verify Server Health (in another terminal)
+### 6.2 Verify Server is Running
 
 ```bash
-curl http://localhost:8000/health
+curl -s http://localhost:8000/health
 ```
 
 **Expected**: `{"status":"healthy"}`
+
+**If server not responding, check logs**:
+```bash
+cat /tmp/uvicorn.log
+```
 
 ---
 
 ## Step 7: Final Verification
 
-### 7.1 Test Login API
+### 7.1 Test Complete Flow
 
 ```bash
-curl -X POST http://localhost:8000/api/auth/login \
+# Test login and get user ID
+USER_RESPONSE=$(curl -s -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"test_user"}'
+  -d '{"username":"setup_test_user"}')
+
+echo "Login response: $USER_RESPONSE"
+
+# Extract user ID using Python (more reliable than grep/sed for JSON)
+USER_ID=$(echo "$USER_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
+
+echo "User ID: $USER_ID"
+
+# Test stats endpoint
+STATS_RESPONSE=$(curl -s http://localhost:8000/api/home/stats \
+  -H "X-User-Id: $USER_ID")
+
+echo "Stats response: $STATS_RESPONSE"
+
+# Verify can_learn is true
+echo "$STATS_RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print('OK: Setup complete!' if data.get('can_learn') else 'ERROR: Unexpected state')"
 ```
 
-**Expected**: JSON response with `id`, `username`, `is_new_user`
-
-### 7.2 Test Stats API
-
-Using the `id` from the previous response:
+### 7.2 Summary Check
 
 ```bash
-curl http://localhost:8000/api/home/stats \
-  -H "X-User-Id: <user-id-from-previous-response>"
+echo "=== Setup Verification ==="
+curl -s http://localhost:8000/health | grep -q "healthy" && echo "✓ Server running" || echo "✗ Server not running"
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
+psql -U "$DB_USER" -d coach_vocabulary -t -c "SELECT COUNT(*) FROM words;" | grep -q "214" && echo "✓ Words seeded (214)" || echo "✗ Words not seeded"
+echo "=== Setup Complete ==="
 ```
-
-**Expected**: JSON with `today_learned: 0`, `can_learn: true`, etc.
-
-### 7.3 Access Swagger UI
-
-Open browser: http://localhost:8000/docs
-
-**Expected**: Interactive API documentation page
 
 ---
 
@@ -290,29 +346,30 @@ brew services start postgresql@14
 sudo systemctl start postgresql
 ```
 
-### Permission Denied on Database
+### Role Does Not Exist
 
 **Symptom**: `FATAL: role "postgres" does not exist`
 
-**Solution**: Use your system username instead:
+**Solution**:
 ```bash
-# Check your username
-whoami
-
-# Update .env
-DATABASE_URL=postgresql://YOUR_USERNAME@localhost:5432/coach_vocabulary
+# Use your system username instead
+PGUSER=$(whoami)
+sed -i.bak "s|DATABASE_URL=.*|DATABASE_URL=postgresql://${PGUSER}@localhost:5432/coach_vocabulary|" .env
 ```
 
-### Module Not Found Errors
+### Database Already Exists
+
+**Symptom**: `ERROR: database "coach_vocabulary" already exists`
+
+**Solution**: This is OK, continue to next step.
+
+### Module Not Found
 
 **Symptom**: `ModuleNotFoundError: No module named 'xxx'`
 
 **Solution**:
 ```bash
-# Ensure virtual environment is activated
 source venv/bin/activate
-
-# Reinstall dependencies
 pip install -r requirements.txt
 ```
 
@@ -322,52 +379,66 @@ pip install -r requirements.txt
 
 **Solution**:
 ```bash
-# Find and kill process on port 8000
-lsof -i :8000
-kill -9 <PID>
-
-# Or use different port
-uvicorn app.main:app --reload --port 8001
+lsof -ti:8000 | xargs kill -9
+uvicorn app.main:app --reload
 ```
 
-### Database Migration Errors
+### Migration Errors
 
 **Symptom**: `alembic.util.exc.CommandError`
 
 **Solution**:
 ```bash
-# Check current migration status
+# Check status
 alembic current
 
-# If database is fresh, upgrade to head
-alembic upgrade head
-
-# If migration history is corrupted, stamp and upgrade
+# If corrupted, reset and retry
 alembic stamp head
 alembic upgrade head
+```
+
+### Seed Script Fails
+
+**Symptom**: `FileNotFoundError` or import errors
+
+**Solution**:
+```bash
+# Ensure you're in repo root with venv activated
+pwd  # Should be coach-vocabulary-backend
+source venv/bin/activate
+python scripts/seed_words.py --direct
 ```
 
 ---
 
 ## Quick Reference
 
-| Command | Purpose |
-|---------|---------|
-| `source venv/bin/activate` | Activate virtual environment |
-| `pip install -r requirements.txt` | Install dependencies |
-| `alembic upgrade head` | Run database migrations |
-| `python scripts/seed_words.py --direct` | Seed word data |
-| `uvicorn app.main:app --reload` | Start dev server |
-| `curl http://localhost:8000/health` | Health check |
-| `curl http://localhost:8000/docs` | API documentation |
+| Step | Command | Purpose |
+|------|---------|---------|
+| Activate venv | `source venv/bin/activate` | Enter virtual environment |
+| Install deps | `pip install -r requirements.txt` | Install Python packages |
+| Run migrations | `alembic upgrade head` | Create database tables |
+| Seed data | `python scripts/seed_words.py --direct` | Import 214 words |
+| Start server | `uvicorn app.main:app --reload` | Start dev server |
+| Health check | `curl http://localhost:8000/health` | Verify server running |
+| API docs | Open http://localhost:8000/docs | Swagger UI |
 
 ---
 
 ## Success Criteria
 
-The setup is complete when:
+Setup is complete when ALL of the following pass:
 
-1. `curl http://localhost:8000/health` returns `{"status":"healthy"}`
-2. `psql -d coach_vocabulary -c "SELECT COUNT(*) FROM words;"` returns 214
-3. Login API returns valid user data
-4. Swagger UI loads at http://localhost:8000/docs
+```bash
+# 1. Server health check
+curl -s http://localhost:8000/health | grep -q "healthy" && echo "PASS" || echo "FAIL"
+
+# 2. Database has words
+DB_USER=$(grep DATABASE_URL .env | sed 's/.*:\/\/\([^:@]*\).*/\1/')
+[ $(psql -U "$DB_USER" -d coach_vocabulary -t -c "SELECT COUNT(*) FROM words;") -ge 200 ] && echo "PASS" || echo "FAIL"
+
+# 3. Login API works
+curl -s -X POST http://localhost:8000/api/auth/login -H "Content-Type: application/json" -d '{"username":"test"}' | grep -q "id" && echo "PASS" || echo "FAIL"
+```
+
+All three checks should output `PASS`.
