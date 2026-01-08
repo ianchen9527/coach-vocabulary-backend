@@ -56,3 +56,8 @@ static/images/*
 !static/images/.gitkeep
 static/audio/*
 !static/audio/.gitkeep
+
+# Raw vocabulary data (processed into data/seed_words.json)
+vocab/
+vocab.zip
+words.json

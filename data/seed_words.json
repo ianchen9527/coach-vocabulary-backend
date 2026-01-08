@@ -1,0 +1,1717 @@
+{
+  "words": [
+    {
+      "word": "contingent",
+      "translation": "視情況而定的",
+      "sentence": "The plan is contingent on the weather.",
+      "sentence_zh": "這個計畫要看天氣狀況而定。",
+      "image_url": "/static/images/4dde4c35353f.png",
+      "audio_url": null
+    },
+    {
+      "word": "corroborate",
+      "translation": "證實",
+      "sentence": "The report corroborates his story.",
+      "sentence_zh": "這份報告證實了他的說法。",
+      "image_url": "/static/images/fd521a58c254.png",
+      "audio_url": null
+    },
+    {
+      "word": "salient",
+      "translation": "顯著的",
+      "sentence": "One salient point is the cost.",
+      "sentence_zh": "其中一個最重要的重點是成本。",
+      "image_url": "/static/images/705cb65dc7c3.png",
+      "audio_url": null
+    },
+    {
+      "word": "mitigate",
+      "translation": "減輕",
+      "sentence": "This policy helps mitigate the risk.",
+      "sentence_zh": "這項政策有助於降低風險。",
+      "image_url": "/static/images/43d603d6b900.png",
+      "audio_url": null
+    },
+    {
+      "word": "abrogate",
+      "translation": "正式廢除（法律、制度）",
+      "sentence": "The government decided to abrogate the old law.",
+      "sentence_zh": "政府決定正式廢除舊法。",
+      "image_url": "/static/images/9fc17b3f9a19.png",
+      "audio_url": null
+    },
+    {
+      "word": "acquiesce",
+      "translation": "默許",
+      "sentence": "She acquiesced to the plan after some discussion.",
+      "sentence_zh": "討論後她勉強同意了這個計畫。",
+      "image_url": "/static/images/a2fae10f2e90.png",
+      "audio_url": null
+    },
+    {
+      "word": "ameliorate",
+      "translation": "改善",
+      "sentence": "The changes helped ameliorate the problem.",
+      "sentence_zh": "這些改變有助於改善問題。",
+      "image_url": "/static/images/856659c9fe22.png",
+      "audio_url": null
+    },
+    {
+      "word": "anachronistic",
+      "translation": "不合時宜的",
+      "sentence": "The rules now seem anachronistic.",
+      "sentence_zh": "這些規定現在看起來已不合時宜。",
+      "image_url": "/static/images/b3be38598884.png",
+      "audio_url": null
+    },
+    {
+      "word": "arduous",
+      "translation": "艱鉅的",
+      "sentence": "Finishing the task was arduous.",
+      "sentence_zh": "完成這項任務非常艱鉅。",
+      "image_url": "/static/images/37a63e1e71d0.png",
+      "audio_url": null
+    },
+    {
+      "word": "assiduous",
+      "translation": "勤勉的",
+      "sentence": "She is assiduous in her work.",
+      "sentence_zh": "她在工作上非常勤勉。",
+      "image_url": "/static/images/aff3ab8cb493.png",
+      "audio_url": null
+    },
+    {
+      "word": "capricious",
+      "translation": "反覆無常的",
+      "sentence": "His capricious decisions confused everyone.",
+      "sentence_zh": "他反覆無常的決定讓大家困惑。",
+      "image_url": "/static/images/df860d5cae18.png",
+      "audio_url": null
+    },
+    {
+      "word": "circumspect",
+      "translation": "謹慎的",
+      "sentence": "You should be circumspect when investing.",
+      "sentence_zh": "投資時你應該謹慎。",
+      "image_url": "/static/images/cb4ce505e81e.png",
+      "audio_url": null
+    },
+    {
+      "word": "deleterious",
+      "translation": "有害的",
+      "sentence": "Stress has deleterious effects on health.",
+      "sentence_zh": "壓力對健康有害。",
+      "image_url": "/static/images/beac26608344.png",
+      "audio_url": null
+    },
+    {
+      "word": "disseminate",
+      "translation": "散播（資訊）",
+      "sentence": "The message was quickly disseminated online.",
+      "sentence_zh": "這則訊息很快在網路上散播開來。",
+      "image_url": "/static/images/3a19659bc649.png",
+      "audio_url": null
+    },
+    {
+      "word": "egregious",
+      "translation": "極其惡劣的",
+      "sentence": "It was an egregious error.",
+      "sentence_zh": "那是一個極其嚴重的錯誤。",
+      "image_url": "/static/images/61e0e7c13a4a.png",
+      "audio_url": null
+    },
+    {
+      "word": "equivocal",
+      "translation": "模稜兩可的",
+      "sentence": "His response was equivocal.",
+      "sentence_zh": "他的回應模稜兩可。",
+      "image_url": "/static/images/b3b9c03ce5c1.png",
+      "audio_url": null
+    },
+    {
+      "word": "fastidious",
+      "translation": "挑剔的",
+      "sentence": "He is fastidious about details.",
+      "sentence_zh": "他對細節非常講究。",
+      "image_url": "/static/images/b8e969704db1.png",
+      "audio_url": null
+    },
+    {
+      "word": "fortuitous",
+      "translation": "偶然的",
+      "sentence": "They met by a fortuitous accident.",
+      "sentence_zh": "他們因偶然的巧合而相遇。",
+      "image_url": "/static/images/a60417b05ba7.png",
+      "audio_url": null
+    },
+    {
+      "word": "gregarious",
+      "translation": "合群的",
+      "sentence": "She is gregarious and outgoing.",
+      "sentence_zh": "她很合群也很外向。",
+      "image_url": "/static/images/40cd32e3fc24.png",
+      "audio_url": null
+    },
+    {
+      "word": "harangue",
+      "translation": "長篇斥責",
+      "sentence": "The manager delivered a harangue.",
+      "sentence_zh": "經理發表了一段斥責。",
+      "image_url": "/static/images/5632d0cab12c.png",
+      "audio_url": null
+    },
+    {
+      "word": "iconoclastic",
+      "translation": "打破傳統的",
+      "sentence": "His ideas were iconoclastic.",
+      "sentence_zh": "他的想法打破傳統。",
+      "image_url": "/static/images/0d489e7035c9.png",
+      "audio_url": null
+    },
+    {
+      "word": "intransigent",
+      "translation": "不妥協的",
+      "sentence": "She remained intransigent.",
+      "sentence_zh": "她仍然不肯妥協。",
+      "image_url": "/static/images/cbabb19fb781.png",
+      "audio_url": null
+    },
+    {
+      "word": "laconic",
+      "translation": "言簡意賅的",
+      "sentence": "His reply was laconic.",
+      "sentence_zh": "他的回覆很簡短。",
+      "image_url": "/static/images/f8ca0be40a55.png",
+      "audio_url": null
+    },
+    {
+      "word": "magnanimous",
+      "translation": "寬宏大量的",
+      "sentence": "She was magnanimous in victory.",
+      "sentence_zh": "她在勝利後表現得很寬宏。",
+      "image_url": "/static/images/91879bf4f2c6.png",
+      "audio_url": null
+    },
+    {
+      "word": "nefarious",
+      "translation": "邪惡的",
+      "sentence": "He was known for his nefarious activities.",
+      "sentence_zh": "他因邪惡的行徑而惡名昭彰。",
+      "image_url": "/static/images/d45857c43657.png",
+      "audio_url": null
+    },
+    {
+      "word": "obfuscate",
+      "translation": "混淆",
+      "sentence": "The explanation only obfuscated the issue.",
+      "sentence_zh": "這個解釋反而讓問題更模糊。",
+      "image_url": "/static/images/1ee321a8b10e.png",
+      "audio_url": null
+    },
+    {
+      "word": "ostensible",
+      "translation": "表面上的",
+      "sentence": "The ostensible reason was safety.",
+      "sentence_zh": "表面上的理由是安全。",
+      "image_url": "/static/images/561278b63bdd.png",
+      "audio_url": null
+    },
+    {
+      "word": "paradigmatic",
+      "translation": "典範的",
+      "sentence": "This case is paradigmatic of the problem.",
+      "sentence_zh": "這個案例是該問題的典型代表。",
+      "image_url": "/static/images/e7beb186a7a6.png",
+      "audio_url": null
+    },
+    {
+      "word": "perfunctory",
+      "translation": "敷衍的",
+      "sentence": "He gave a perfunctory apology.",
+      "sentence_zh": "他敷衍地道了歉。",
+      "image_url": "/static/images/e75e60066177.png",
+      "audio_url": null
+    },
+    {
+      "word": "preclude",
+      "translation": "阻止",
+      "sentence": "The damage precludes any quick repair.",
+      "sentence_zh": "這樣的損壞排除了快速修復的可能。",
+      "image_url": "/static/images/0a63b154d31c.png",
+      "audio_url": null
+    },
+    {
+      "word": "proliferate",
+      "translation": "激增",
+      "sentence": "New apps continue to proliferate.",
+      "sentence_zh": "新應用程式不斷激增。",
+      "image_url": "/static/images/0624f18bcc6c.png",
+      "audio_url": null
+    },
+    {
+      "word": "recalcitrant",
+      "translation": "頑抗的",
+      "sentence": "The recalcitrant student refused to cooperate.",
+      "sentence_zh": "那名頑固的學生拒絕配合。",
+      "image_url": "/static/images/4011ab77b5fa.png",
+      "audio_url": null
+    },
+    {
+      "word": "redress",
+      "translation": "糾正",
+      "sentence": "The policy aims to redress inequality.",
+      "sentence_zh": "這項政策旨在糾正不平等。",
+      "image_url": "/static/images/3cb11f669be0.png",
+      "audio_url": null
+    },
+    {
+      "word": "relegate",
+      "translation": "貶低",
+      "sentence": "He was relegated to a minor role.",
+      "sentence_zh": "他被降為次要角色。",
+      "image_url": "/static/images/41d22cc2acf0.png",
+      "audio_url": null
+    },
+    {
+      "word": "repudiate",
+      "translation": "拒絕接受",
+      "sentence": "She repudiated the accusation.",
+      "sentence_zh": "她否認了那項指控。",
+      "image_url": "/static/images/e7e3c2ca1e27.png",
+      "audio_url": null
+    },
+    {
+      "word": "spurious",
+      "translation": "虛假的",
+      "sentence": "The claim turned out to be spurious.",
+      "sentence_zh": "那項主張後來被證實是假的。",
+      "image_url": "/static/images/992a4ac79f07.png",
+      "audio_url": null
+    },
+    {
+      "word": "superfluous",
+      "translation": "多餘的",
+      "sentence": "The extra details were superfluous.",
+      "sentence_zh": "那些額外細節是多餘的。",
+      "image_url": "/static/images/0a053bbea5a3.png",
+      "audio_url": null
+    },
+    {
+      "word": "tenuous",
+      "translation": "脆弱的",
+      "sentence": "The connection is tenuous.",
+      "sentence_zh": "這種關聯很薄弱。",
+      "image_url": "/static/images/c2afebf9f41d.png",
+      "audio_url": null
+    },
+    {
+      "word": "truculent",
+      "translation": "好鬥的",
+      "sentence": "His truculent tone alarmed everyone.",
+      "sentence_zh": "他好鬥的語氣讓大家不安。",
+      "image_url": "/static/images/adfd1fade35c.png",
+      "audio_url": null
+    },
+    {
+      "word": "ubiquitous",
+      "translation": "無所不在的",
+      "sentence": "Smartphones are ubiquitous today.",
+      "sentence_zh": "智慧型手機如今無所不在。",
+      "image_url": "/static/images/12ac61531ef7.png",
+      "audio_url": null
+    },
+    {
+      "word": "venerate",
+      "translation": "崇敬",
+      "sentence": "They venerate their ancestors.",
+      "sentence_zh": "他們崇敬祖先。",
+      "image_url": "/static/images/a19cae1d534d.png",
+      "audio_url": null
+    },
+    {
+      "word": "vindicate",
+      "translation": "證明正當",
+      "sentence": "The evidence vindicated him.",
+      "sentence_zh": "證據證明了他的清白。",
+      "image_url": "/static/images/da57984dbe04.png",
+      "audio_url": null
+    },
+    {
+      "word": "volatile",
+      "translation": "不穩定的",
+      "sentence": "The market is highly volatile.",
+      "sentence_zh": "市場非常不穩定。",
+      "image_url": "/static/images/740b0f64e179.png",
+      "audio_url": null
+    },
+    {
+      "word": "zealous",
+      "translation": "熱衷的",
+      "sentence": "She is zealous about her work.",
+      "sentence_zh": "她對工作非常熱衷。",
+      "image_url": "/static/images/43e3daead10d.png",
+      "audio_url": null
+    },
+    {
+      "word": "alacrity",
+      "translation": "欣然迅速",
+      "sentence": "He accepted the task with alacrity.",
+      "sentence_zh": "他欣然迅速地接受了任務。",
+      "image_url": "/static/images/2a74e93bcb60.png",
+      "audio_url": null
+    },
+    {
+      "word": "bellicose",
+      "translation": "好戰的",
+      "sentence": "His bellicose attitude worried others.",
+      "sentence_zh": "他好戰的態度讓人擔心。",
+      "image_url": "/static/images/a6a710181ace.png",
+      "audio_url": null
+    },
+    {
+      "word": "cogent",
+      "translation": "有說服力的",
+      "sentence": "She gave a cogent argument.",
+      "sentence_zh": "她提出了有說服力的論點。",
+      "image_url": "/static/images/e19a4dce180a.png",
+      "audio_url": null
+    },
+    {
+      "word": "convoluted",
+      "translation": "複雜難懂的",
+      "sentence": "The instructions were convoluted.",
+      "sentence_zh": "說明內容非常複雜。",
+      "image_url": "/static/images/079df760bd3e.png",
+      "audio_url": null
+    },
+    {
+      "word": "didactic",
+      "translation": "說教的",
+      "sentence": "The book has a didactic tone.",
+      "sentence_zh": "這本書帶有說教的語氣。",
+      "image_url": "/static/images/c45c6b2c7fe8.png",
+      "audio_url": null
+    },
+    {
+      "word": "equanimity",
+      "translation": "冷靜",
+      "sentence": "He faced the crisis with equanimity.",
+      "sentence_zh": "他冷靜地面對危機。",
+      "image_url": "/static/images/2554229831d8.png",
+      "audio_url": null
+    },
+    {
+      "word": "hackneyed",
+      "translation": "陳腔濫調的",
+      "sentence": "The story felt hackneyed.",
+      "sentence_zh": "這個故事顯得老套。",
+      "image_url": "/static/images/1e1541423686.png",
+      "audio_url": null
+    },
+    {
+      "word": "inchoate",
+      "translation": "未成熟的",
+      "sentence": "The plan was still inchoate.",
+      "sentence_zh": "這個計畫仍未成熟。",
+      "image_url": "/static/images/b6944416ed19.png",
+      "audio_url": null
+    },
+    {
+      "word": "inscrutable",
+      "translation": "高深莫測的",
+      "sentence": "His expression was inscrutable.",
+      "sentence_zh": "他的表情高深莫測。",
+      "image_url": "/static/images/f28f0268feb4.png",
+      "audio_url": null
+    },
+    {
+      "word": "intrepid",
+      "translation": "無畏的",
+      "sentence": "The intrepid explorer continued.",
+      "sentence_zh": "那名無畏的探險家繼續前行。",
+      "image_url": "/static/images/0f530e2b895f.png",
+      "audio_url": null
+    },
+    {
+      "word": "mendacious",
+      "translation": "愛說謊的",
+      "sentence": "He was known to be mendacious.",
+      "sentence_zh": "他以愛說謊聞名。",
+      "image_url": "/static/images/9208defe5dbd.png",
+      "audio_url": null
+    },
+    {
+      "word": "munificent",
+      "translation": "慷慨的",
+      "sentence": "She made a munificent donation.",
+      "sentence_zh": "她做出了慷慨的捐贈。",
+      "image_url": "/static/images/1106662572cb.png",
+      "audio_url": null
+    },
+    {
+      "word": "obdurate",
+      "translation": "頑固的",
+      "sentence": "He remained obdurate.",
+      "sentence_zh": "他仍然十分頑固。",
+      "image_url": "/static/images/081b2c81bc20.png",
+      "audio_url": null
+    },
+    {
+      "word": "parsimonious",
+      "translation": "吝嗇的",
+      "sentence": "He is parsimonious with money.",
+      "sentence_zh": "他在金錢上很吝嗇。",
+      "image_url": "/static/images/55ae7c850655.png",
+      "audio_url": null
+    },
+    {
+      "word": "pragmatic",
+      "translation": "務實的",
+      "sentence": "We need a pragmatic solution.",
+      "sentence_zh": "我們需要一個務實的解決方案。",
+      "image_url": "/static/images/f7a346968b52.png",
+      "audio_url": null
+    },
+    {
+      "word": "quixotic",
+      "translation": "不切實際的",
+      "sentence": "His plan was quixotic.",
+      "sentence_zh": "他的計畫不切實際。",
+      "image_url": "/static/images/53c7aa7f4711.png",
+      "audio_url": null
+    },
+    {
+      "word": "reprehensible",
+      "translation": "應受譴責的",
+      "sentence": "His behavior was reprehensible.",
+      "sentence_zh": "他的行為應受譴責。",
+      "image_url": "/static/images/9c8875393b40.png",
+      "audio_url": null
+    },
+    {
+      "word": "sanguine",
+      "translation": "樂觀的",
+      "sentence": "She remained sanguine about the future.",
+      "sentence_zh": "她對未來仍然樂觀。",
+      "image_url": "/static/images/b792681578e8.png",
+      "audio_url": null
+    },
+    {
+      "word": "specious",
+      "translation": "似是而非的",
+      "sentence": "The argument was specious.",
+      "sentence_zh": "這個論點似是而非。",
+      "image_url": "/static/images/7142c0c08922.png",
+      "audio_url": null
+    },
+    {
+      "word": "stalwart",
+      "translation": "堅定的",
+      "sentence": "He is a stalwart supporter.",
+      "sentence_zh": "他是一名堅定的支持者。",
+      "image_url": "/static/images/bccad41b467a.png",
+      "audio_url": null
+    },
+    {
+      "word": "taciturn",
+      "translation": "沉默寡言的",
+      "sentence": "The taciturn man spoke little.",
+      "sentence_zh": "那名沉默寡言的人話不多。",
+      "image_url": "/static/images/b80816f3ab27.png",
+      "audio_url": null
+    },
+    {
+      "word": "trenchant",
+      "translation": "犀利的",
+      "sentence": "She made a trenchant comment.",
+      "sentence_zh": "她發表了犀利的評論。",
+      "image_url": "/static/images/6a1618d83be4.png",
+      "audio_url": null
+    },
+    {
+      "word": "unctuous",
+      "translation": "虛偽的",
+      "sentence": "His unctuous manner annoyed everyone.",
+      "sentence_zh": "他虛偽的態度讓大家反感。",
+      "image_url": "/static/images/5bf4332de7a3.png",
+      "audio_url": null
+    },
+    {
+      "word": "vociferous",
+      "translation": "喧鬧的",
+      "sentence": "The crowd was vociferous.",
+      "sentence_zh": "人群喧鬧不已。",
+      "image_url": "/static/images/013e464efa50.png",
+      "audio_url": null
+    },
+    {
+      "word": "wanton",
+      "translation": "恣意的",
+      "sentence": "The damage was wanton.",
+      "sentence_zh": "破壞行為十分恣意。",
+      "image_url": "/static/images/92f23683118c.png",
+      "audio_url": null
+    },
+    {
+      "word": "wary",
+      "translation": "謹慎的",
+      "sentence": "She was wary of strangers.",
+      "sentence_zh": "她對陌生人保持警惕。",
+      "image_url": "/static/images/4e91314c7435.png",
+      "audio_url": null
+    },
+    {
+      "word": "wistful",
+      "translation": "惆悵的",
+      "sentence": "He gave a wistful smile.",
+      "sentence_zh": "他露出惆悵的微笑。",
+      "image_url": "/static/images/8534caa85461.png",
+      "audio_url": null
+    },
+    {
+      "word": "abstruse",
+      "translation": "深奧的",
+      "sentence": "The theory is abstruse.",
+      "sentence_zh": "這個理論非常深奧。",
+      "image_url": "/static/images/a0ed5bc8c0fe.png",
+      "audio_url": null
+    },
+    {
+      "word": "chimerical",
+      "translation": "空想的",
+      "sentence": "His hopes were chimerical.",
+      "sentence_zh": "他的希望不切實際。",
+      "image_url": "/static/images/ef41e7dd299d.png",
+      "audio_url": null
+    },
+    {
+      "word": "dilatory",
+      "translation": "拖延的",
+      "sentence": "His dilatory response caused delays.",
+      "sentence_zh": "他拖延的回應造成了延誤。",
+      "image_url": "/static/images/73f648949dcc.png",
+      "audio_url": null
+    },
+    {
+      "word": "effrontery",
+      "translation": "厚顏無恥",
+      "sentence": "He had the effrontery to complain.",
+      "sentence_zh": "他竟厚顏無恥地抱怨。",
+      "image_url": "/static/images/5dd208b8ea82.png",
+      "audio_url": null
+    },
+    {
+      "word": "exculpate",
+      "translation": "為…開脫罪責",
+      "sentence": "The lawyer tried to exculpate him.",
+      "sentence_zh": "律師試圖為他開脫罪責。",
+      "image_url": "/static/images/51a5469e31b9.png",
+      "audio_url": null
+    },
+    {
+      "word": "fecund",
+      "translation": "多產的",
+      "sentence": "The land is fecund.",
+      "sentence_zh": "這片土地非常肥沃。",
+      "image_url": "/static/images/8f145211ae41.png",
+      "audio_url": null
+    },
+    {
+      "word": "histrionic",
+      "translation": "做作的",
+      "sentence": "Her reaction was histrionic.",
+      "sentence_zh": "她的反應非常做作。",
+      "image_url": "/static/images/af4eaff7234a.png",
+      "audio_url": null
+    },
+    {
+      "word": "impecunious",
+      "translation": "貧困的",
+      "sentence": "He was impecunious at the time.",
+      "sentence_zh": "當時他十分貧困。",
+      "image_url": "/static/images/162a73be2df7.png",
+      "audio_url": null
+    },
+    {
+      "word": "lachrymose",
+      "translation": "愛哭的",
+      "sentence": "The movie was lachrymose.",
+      "sentence_zh": "那部電影令人落淚。",
+      "image_url": "/static/images/6bd7e33e6994.png",
+      "audio_url": null
+    },
+    {
+      "word": "lugubrious",
+      "translation": "憂鬱的",
+      "sentence": "He spoke in a lugubrious tone.",
+      "sentence_zh": "他用憂鬱的語氣說話。",
+      "image_url": "/static/images/eecc8d8f1797.png",
+      "audio_url": null
+    },
+    {
+      "word": "maverick",
+      "translation": "特立獨行者",
+      "sentence": "She is a maverick in the field.",
+      "sentence_zh": "她是該領域的特立獨行者。",
+      "image_url": "/static/images/eb37996de87c.png",
+      "audio_url": null
+    },
+    {
+      "word": "pernicious",
+      "translation": "有害的",
+      "sentence": "Corruption has pernicious effects.",
+      "sentence_zh": "貪腐有惡性的影響。",
+      "image_url": "/static/images/13aad79e8c3b.png",
+      "audio_url": null
+    },
+    {
+      "word": "quandary",
+      "translation": "進退兩難",
+      "sentence": "She was in a quandary.",
+      "sentence_zh": "她陷入進退兩難。",
+      "image_url": "/static/images/f44b33403400.png",
+      "audio_url": null
+    },
+    {
+      "word": "recondite",
+      "translation": "深奧難懂的",
+      "sentence": "The topic is recondite.",
+      "sentence_zh": "這個主題很深奧。",
+      "image_url": "/static/images/e794fc17d5f9.png",
+      "audio_url": null
+    },
+    {
+      "word": "sardonic",
+      "translation": "諷刺的",
+      "sentence": "He gave a sardonic laugh.",
+      "sentence_zh": "他發出諷刺的笑聲。",
+      "image_url": "/static/images/a7fc5ef70804.png",
+      "audio_url": null
+    },
+    {
+      "word": "sycophantic",
+      "translation": "諂媚的",
+      "sentence": "His sycophantic behavior was obvious.",
+      "sentence_zh": "他諂媚的行為非常明顯。",
+      "image_url": "/static/images/248037a8204c.png",
+      "audio_url": null
+    },
+    {
+      "word": "torpid",
+      "translation": "遲鈍的",
+      "sentence": "He felt torpid after lunch.",
+      "sentence_zh": "午餐後他感到無精打采。",
+      "image_url": "/static/images/783817b06f2f.png",
+      "audio_url": null
+    },
+    {
+      "word": "unassailable",
+      "translation": "無懈可擊的",
+      "sentence": "Her logic was unassailable.",
+      "sentence_zh": "她的邏輯無懈可擊。",
+      "image_url": "/static/images/d0a3c05dd0de.png",
+      "audio_url": null
+    },
+    {
+      "word": "verisimilitude",
+      "translation": "逼真",
+      "sentence": "The story has verisimilitude.",
+      "sentence_zh": "這個故事很有真實感。",
+      "image_url": "/static/images/6fc38dd1bc9d.png",
+      "audio_url": null
+    },
+    {
+      "word": "winsome",
+      "translation": "迷人的",
+      "sentence": "She has a winsome smile.",
+      "sentence_zh": "她有迷人的笑容。",
+      "image_url": "/static/images/bbbd38741327.png",
+      "audio_url": null
+    },
+    {
+      "word": "zephyr",
+      "translation": "微風",
+      "sentence": "A zephyr cooled the air.",
+      "sentence_zh": "微風讓空氣涼爽起來。",
+      "image_url": "/static/images/a50cffbdbbab.png",
+      "audio_url": null
+    },
+    {
+      "word": "abstemious",
+      "translation": "節制的（飲食或享樂）",
+      "sentence": "He is abstemious when eating sweets.",
+      "sentence_zh": "他吃甜食時很節制。",
+      "image_url": "/static/images/173c2650e981.png",
+      "audio_url": null
+    },
+    {
+      "word": "acerbic",
+      "translation": "尖刻的",
+      "sentence": "Her acerbic remarks upset the team.",
+      "sentence_zh": "她尖刻的話讓團隊不舒服。",
+      "image_url": "/static/images/a52280621c7e.png",
+      "audio_url": null
+    },
+    {
+      "word": "adamantine",
+      "translation": "堅不可摧的",
+      "sentence": "She showed adamantine resolve under pressure.",
+      "sentence_zh": "在壓力下她展現堅定不移的意志。",
+      "image_url": "/static/images/b1c8e14141f0.png",
+      "audio_url": null
+    },
+    {
+      "word": "adumbrate",
+      "translation": "預示",
+      "sentence": "The report adumbrates a new strategy.",
+      "sentence_zh": "報告預示了一項新策略。",
+      "image_url": "/static/images/c4f0d6b77091.png",
+      "audio_url": null
+    },
+    {
+      "word": "anodyne",
+      "translation": "平淡無味的",
+      "sentence": "His anodyne speech changed no one's mind.",
+      "sentence_zh": "他平淡的演講沒有改變任何人的想法。",
+      "image_url": "/static/images/2db831f447db.png",
+      "audio_url": null
+    },
+    {
+      "word": "antediluvian",
+      "translation": "極古老的",
+      "sentence": "Their system is antediluvian and slow.",
+      "sentence_zh": "他們的系統非常過時且緩慢。",
+      "image_url": "/static/images/286f3087f6c8.png",
+      "audio_url": null
+    },
+    {
+      "word": "antithetical",
+      "translation": "對立的",
+      "sentence": "His actions are antithetical to his words.",
+      "sentence_zh": "他的行為與他的話完全相反。",
+      "image_url": "/static/images/99a8d8f99e71.png",
+      "audio_url": null
+    },
+    {
+      "word": "apocryphal",
+      "translation": "真偽存疑的",
+      "sentence": "That story is probably apocryphal.",
+      "sentence_zh": "那個故事很可能是杜撰的。",
+      "image_url": "/static/images/17bd61d53c08.png",
+      "audio_url": null
+    },
+    {
+      "word": "approbation",
+      "translation": "稱許",
+      "sentence": "She sought approbation from her mentor.",
+      "sentence_zh": "她希望得到導師的稱許。",
+      "image_url": "/static/images/2c8160ed0f2c.png",
+      "audio_url": null
+    },
+    {
+      "word": "artifice",
+      "translation": "詭計",
+      "sentence": "He used artifice to avoid the question.",
+      "sentence_zh": "他用巧妙手段避開了問題。",
+      "image_url": "/static/images/1f8bffc44ef1.png",
+      "audio_url": null
+    },
+    {
+      "word": "ascetic",
+      "translation": "苦行的",
+      "sentence": "He lives an ascetic lifestyle.",
+      "sentence_zh": "他過著苦行般的生活。",
+      "image_url": "/static/images/807ee3b83587.png",
+      "audio_url": null
+    },
+    {
+      "word": "asperity",
+      "translation": "嚴厲",
+      "sentence": "She spoke with asperity during the meeting.",
+      "sentence_zh": "她在會議中語氣很嚴厲。",
+      "image_url": "/static/images/843848df6e85.png",
+      "audio_url": null
+    },
+    {
+      "word": "auspicious",
+      "translation": "吉利的",
+      "sentence": "The first results were auspicious.",
+      "sentence_zh": "最初的結果是個好兆頭。",
+      "image_url": "/static/images/ac8ac042580e.png",
+      "audio_url": null
+    },
+    {
+      "word": "axiomatic",
+      "translation": "不證自明的",
+      "sentence": "It is axiomatic that trust takes time.",
+      "sentence_zh": "信任需要時間是不證自明的。",
+      "image_url": "/static/images/689ef38009c3.png",
+      "audio_url": null
+    },
+    {
+      "word": "bereft",
+      "translation": "喪失的",
+      "sentence": "He felt bereft after the loss.",
+      "sentence_zh": "失去之後他感到空虛。",
+      "image_url": "/static/images/b7fa4e52f132.png",
+      "audio_url": null
+    },
+    {
+      "word": "blandishment",
+      "translation": "奉承",
+      "sentence": "He tried blandishment to get approval.",
+      "sentence_zh": "他用甜言蜜語想獲得同意。",
+      "image_url": "/static/images/b6ed54222c79.png",
+      "audio_url": null
+    },
+    {
+      "word": "callous",
+      "translation": "冷酷無情的",
+      "sentence": "His callous reaction shocked everyone.",
+      "sentence_zh": "他冷酷的反應讓大家震驚。",
+      "image_url": "/static/images/b68ef5c915b2.png",
+      "audio_url": null
+    },
+    {
+      "word": "canonize",
+      "translation": "奉為典範",
+      "sentence": "The media canonized her as a hero.",
+      "sentence_zh": "媒體把她奉為英雄典範。",
+      "image_url": "/static/images/1fe626dbbecb.png",
+      "audio_url": null
+    },
+    {
+      "word": "capitulate",
+      "translation": "屈服",
+      "sentence": "They refused to capitulate to demands.",
+      "sentence_zh": "他們拒絕向要求屈服。",
+      "image_url": "/static/images/b08fad9d71b2.png",
+      "audio_url": null
+    },
+    {
+      "word": "censure",
+      "translation": "譴責",
+      "sentence": "The committee censured the official.",
+      "sentence_zh": "委員會譴責了那位官員。",
+      "image_url": "/static/images/887ab1740735.png",
+      "audio_url": null
+    },
+    {
+      "word": "chicanery",
+      "translation": "詭計",
+      "sentence": "The deal was full of chicanery.",
+      "sentence_zh": "這筆交易充滿狡詐手段。",
+      "image_url": "/static/images/2943e273bdbb.png",
+      "audio_url": null
+    },
+    {
+      "word": "circumlocution",
+      "translation": "迂迴說法",
+      "sentence": "He avoided the topic with circumlocution.",
+      "sentence_zh": "他拐彎抹角地避開話題。",
+      "image_url": "/static/images/8ef13cccf347.png",
+      "audio_url": null
+    },
+    {
+      "word": "commensurate",
+      "translation": "相稱的",
+      "sentence": "Pay should be commensurate with effort.",
+      "sentence_zh": "薪酬應與付出相稱。",
+      "image_url": "/static/images/26da1af9aa19.png",
+      "audio_url": null
+    },
+    {
+      "word": "compunction",
+      "translation": "良心不安",
+      "sentence": "He felt compunction after lying.",
+      "sentence_zh": "說謊後他良心不安。",
+      "image_url": "/static/images/bbc9ec22a199.png",
+      "audio_url": null
+    },
+    {
+      "word": "conflagration",
+      "translation": "大火",
+      "sentence": "The conflagration spread rapidly.",
+      "sentence_zh": "大火迅速蔓延。",
+      "image_url": "/static/images/e351ccf5642f.png",
+      "audio_url": null
+    },
+    {
+      "word": "conjecture",
+      "translation": "推測",
+      "sentence": "It is conjecture without evidence.",
+      "sentence_zh": "沒有證據就只是推測。",
+      "image_url": "/static/images/e8d3e1780f00.png",
+      "audio_url": null
+    },
+    {
+      "word": "connoisseur",
+      "translation": "行家",
+      "sentence": "A connoisseur can spot quality quickly.",
+      "sentence_zh": "行家能很快看出品質。",
+      "image_url": "/static/images/750566598610.png",
+      "audio_url": null
+    },
+    {
+      "word": "consanguineous",
+      "translation": "血親的",
+      "sentence": "They are consanguineous relatives.",
+      "sentence_zh": "他們是血親。",
+      "image_url": "/static/images/7c460c9eaa67.png",
+      "audio_url": null
+    },
+    {
+      "word": "contumacious",
+      "translation": "抗命的",
+      "sentence": "His contumacious stance caused trouble.",
+      "sentence_zh": "他抗命的態度引發麻煩。",
+      "image_url": "/static/images/98f3a62eb503.png",
+      "audio_url": null
+    },
+    {
+      "word": "corpulent",
+      "translation": "肥胖的",
+      "sentence": "The corpulent cat moved slowly.",
+      "sentence_zh": "那隻肥胖的貓走得很慢。",
+      "image_url": "/static/images/89097700be08.png",
+      "audio_url": null
+    },
+    {
+      "word": "credulous",
+      "translation": "輕信的",
+      "sentence": "Credulous people fall for scams easily.",
+      "sentence_zh": "輕信的人容易受騙。",
+      "image_url": "/static/images/e74ded5f951f.png",
+      "audio_url": null
+    },
+    {
+      "word": "deference",
+      "translation": "尊重",
+      "sentence": "He spoke with deference to the elders.",
+      "sentence_zh": "他以敬意與長輩說話。",
+      "image_url": "/static/images/e5ae2d2f9384.png",
+      "audio_url": null
+    },
+    {
+      "word": "defenestrate",
+      "translation": "把…從窗戶扔出去（比喻：粗暴移除）",
+      "sentence": "The board defenestrated the CEO in a crisis.",
+      "sentence_zh": "董事會在危機中把執行長粗暴撤換。",
+      "image_url": "/static/images/a28fe2107b76.png",
+      "audio_url": null
+    },
+    {
+      "word": "deleteriousness",
+      "translation": "有害性",
+      "sentence": "We underestimated the deleteriousness of the policy.",
+      "sentence_zh": "我們低估了該政策的有害性。",
+      "image_url": "/static/images/d372cbf1b379.png",
+      "audio_url": null
+    },
+    {
+      "word": "delineate",
+      "translation": "闡明",
+      "sentence": "Please delineate your responsibilities clearly.",
+      "sentence_zh": "請清楚闡明你的職責。",
+      "image_url": "/static/images/85096e405716.png",
+      "audio_url": null
+    },
+    {
+      "word": "denouement",
+      "translation": "結局",
+      "sentence": "The denouement surprised the audience.",
+      "sentence_zh": "結局讓觀眾意外。",
+      "image_url": "/static/images/6ca48f1e563e.png",
+      "audio_url": null
+    },
+    {
+      "word": "desultory",
+      "translation": "散漫的",
+      "sentence": "Their discussion was desultory.",
+      "sentence_zh": "他們的討論很散漫。",
+      "image_url": "/static/images/388e3381ec47.png",
+      "audio_url": null
+    },
+    {
+      "word": "diaphanous",
+      "translation": "半透明的",
+      "sentence": "A diaphanous curtain let in light.",
+      "sentence_zh": "薄紗窗簾讓光線透進來。",
+      "image_url": "/static/images/afe2b0086332.png",
+      "audio_url": null
+    },
+    {
+      "word": "disabuse",
+      "translation": "使醒悟",
+      "sentence": "He disabused me of the rumor.",
+      "sentence_zh": "他讓我明白那只是謠言。",
+      "image_url": "/static/images/1fd23c274ca6.png",
+      "audio_url": null
+    },
+    {
+      "word": "discomfit",
+      "translation": "使尷尬",
+      "sentence": "The question discomfited the speaker.",
+      "sentence_zh": "那個問題讓講者很尷尬。",
+      "image_url": "/static/images/90be668e59c5.png",
+      "audio_url": null
+    },
+    {
+      "word": "disparate",
+      "translation": "迥然不同的",
+      "sentence": "They compared two disparate ideas.",
+      "sentence_zh": "他們比較了兩個迥然不同的想法。",
+      "image_url": "/static/images/33dbeeb0c423.png",
+      "audio_url": null
+    },
+    {
+      "word": "dissimulation",
+      "translation": "掩飾",
+      "sentence": "He answered with dissimulation.",
+      "sentence_zh": "他用掩飾的方式回答。",
+      "image_url": "/static/images/5298a1e663c0.png",
+      "audio_url": null
+    },
+    {
+      "word": "dissonance",
+      "translation": "不和諧",
+      "sentence": "There was dissonance between words and actions.",
+      "sentence_zh": "言行之間存在不一致。",
+      "image_url": "/static/images/fece6fda3b93.png",
+      "audio_url": null
+    },
+    {
+      "word": "dogmatic",
+      "translation": "教條的",
+      "sentence": "He is dogmatic about politics.",
+      "sentence_zh": "他談政治很武斷。",
+      "image_url": "/static/images/4632afe9f5a3.png",
+      "audio_url": null
+    },
+    {
+      "word": "ebullient",
+      "translation": "熱情洋溢的",
+      "sentence": "Her ebullient mood lifted everyone.",
+      "sentence_zh": "她熱情的情緒帶動了大家。",
+      "image_url": "/static/images/e6fe7b9bea8f.png",
+      "audio_url": null
+    },
+    {
+      "word": "eclectic",
+      "translation": "兼收並蓄的",
+      "sentence": "His tastes are eclectic.",
+      "sentence_zh": "他的喜好很兼收並蓄。",
+      "image_url": "/static/images/0f88090c2f49.png",
+      "audio_url": null
+    },
+    {
+      "word": "efficacious",
+      "translation": "有效的",
+      "sentence": "The treatment proved efficacious.",
+      "sentence_zh": "這項治療被證明有效。",
+      "image_url": "/static/images/c5fda2a62965.png",
+      "audio_url": null
+    },
+    {
+      "word": "elegiac",
+      "translation": "哀傷的",
+      "sentence": "The poem has an elegiac tone.",
+      "sentence_zh": "這首詩帶有哀傷的語氣。",
+      "image_url": "/static/images/2eed2531b859.png",
+      "audio_url": null
+    },
+    {
+      "word": "emollient",
+      "translation": "使緩和的",
+      "sentence": "His emollient words eased the tension.",
+      "sentence_zh": "他緩和的話化解了緊張。",
+      "image_url": "/static/images/46e538d59cd3.png",
+      "audio_url": null
+    },
+    {
+      "word": "endemic",
+      "translation": "地方性的",
+      "sentence": "Corruption is endemic in the system.",
+      "sentence_zh": "貪腐在這個系統中很普遍。",
+      "image_url": "/static/images/830964645557.png",
+      "audio_url": null
+    },
+    {
+      "word": "enjoin",
+      "translation": "命令",
+      "sentence": "The judge enjoined them to stop.",
+      "sentence_zh": "法官命令他們停止。",
+      "image_url": "/static/images/e0da40a5a7cf.png",
+      "audio_url": null
+    },
+    {
+      "word": "ephemeral",
+      "translation": "短暫的",
+      "sentence": "Fame can be ephemeral.",
+      "sentence_zh": "名聲可能很短暫。",
+      "image_url": "/static/images/69dfb6cefe87.png",
+      "audio_url": null
+    },
+    {
+      "word": "epistolary",
+      "translation": "書信體的",
+      "sentence": "It is an epistolary novel.",
+      "sentence_zh": "那是一本書信體小說。",
+      "image_url": "/static/images/8b96077509c6.png",
+      "audio_url": null
+    },
+    {
+      "word": "equivocate",
+      "translation": "支吾其詞",
+      "sentence": "He tried to equivocate on the issue.",
+      "sentence_zh": "他試圖在此事上含糊其辭。",
+      "image_url": "/static/images/973532599483.png",
+      "audio_url": null
+    },
+    {
+      "word": "erudite",
+      "translation": "博學的",
+      "sentence": "She gave an erudite lecture.",
+      "sentence_zh": "她做了一場博學的演講。",
+      "image_url": "/static/images/4849d1060878.png",
+      "audio_url": null
+    },
+    {
+      "word": "eschew",
+      "translation": "避開",
+      "sentence": "He eschews gossip at work.",
+      "sentence_zh": "他在工作中避談八卦。",
+      "image_url": "/static/images/6ddbfd951dd3.png",
+      "audio_url": null
+    },
+    {
+      "word": "estrange",
+      "translation": "使疏遠",
+      "sentence": "The conflict estranged old friends.",
+      "sentence_zh": "衝突使老朋友疏遠。",
+      "image_url": "/static/images/629ce1c8c961.png",
+      "audio_url": null
+    },
+    {
+      "word": "euphemism",
+      "translation": "委婉語",
+      "sentence": "He used a euphemism to be polite.",
+      "sentence_zh": "他用委婉語保持禮貌。",
+      "image_url": "/static/images/e3dc71630d52.png",
+      "audio_url": null
+    },
+    {
+      "word": "evince",
+      "translation": "顯示",
+      "sentence": "She evinced strong interest in the role.",
+      "sentence_zh": "她表現出對該職位的強烈興趣。",
+      "image_url": "/static/images/ee70a5ac5236.png",
+      "audio_url": null
+    },
+    {
+      "word": "exigent",
+      "translation": "緊急的",
+      "sentence": "Exigent circumstances required action.",
+      "sentence_zh": "緊急情勢需要行動。",
+      "image_url": "/static/images/1bd726931518.png",
+      "audio_url": null
+    },
+    {
+      "word": "expatiate",
+      "translation": "詳述",
+      "sentence": "He expatiated on the plan for hours.",
+      "sentence_zh": "他詳細談了好幾個小時。",
+      "image_url": "/static/images/3382dbea0d5f.png",
+      "audio_url": null
+    },
+    {
+      "word": "expiate",
+      "translation": "贖罪",
+      "sentence": "He tried to expiate his mistake.",
+      "sentence_zh": "他試圖彌補自己的錯誤。",
+      "image_url": "/static/images/cc767067461c.png",
+      "audio_url": null
+    },
+    {
+      "word": "extirpate",
+      "translation": "根除",
+      "sentence": "They aim to extirpate corruption.",
+      "sentence_zh": "他們旨在根除貪腐。",
+      "image_url": "/static/images/e08e5b327771.png",
+      "audio_url": null
+    },
+    {
+      "word": "factitious",
+      "translation": "人為的",
+      "sentence": "Their smiles felt factitious.",
+      "sentence_zh": "他們的笑容顯得不自然。",
+      "image_url": "/static/images/6fb2d084a0e4.png",
+      "audio_url": null
+    },
+    {
+      "word": "farrago",
+      "translation": "雜燴",
+      "sentence": "The report was a farrago of ideas.",
+      "sentence_zh": "報告像是想法的大雜燴。",
+      "image_url": "/static/images/0e60dde968bb.png",
+      "audio_url": null
+    },
+    {
+      "word": "florid",
+      "translation": "華麗的",
+      "sentence": "His writing style is florid.",
+      "sentence_zh": "他的文風很華麗。",
+      "image_url": "/static/images/45a8e441355d.png",
+      "audio_url": null
+    },
+    {
+      "word": "frangible",
+      "translation": "易碎的",
+      "sentence": "The frangible glass broke easily.",
+      "sentence_zh": "易碎的玻璃很容易破。",
+      "image_url": "/static/images/06ba3893edcb.png",
+      "audio_url": null
+    },
+    {
+      "word": "gainsay",
+      "translation": "否認",
+      "sentence": "No one can gainsay the results.",
+      "sentence_zh": "沒有人能否認這些結果。",
+      "image_url": "/static/images/82ac8790f1df.png",
+      "audio_url": null
+    },
+    {
+      "word": "galvanize",
+      "translation": "激勵",
+      "sentence": "The speech galvanized the crowd.",
+      "sentence_zh": "演講激勵了人群。",
+      "image_url": "/static/images/6bc82a7f2deb.png",
+      "audio_url": null
+    },
+    {
+      "word": "garrulous",
+      "translation": "喋喋不休的",
+      "sentence": "A garrulous guest dominated the talk.",
+      "sentence_zh": "一位喋喋不休的客人主導了談話。",
+      "image_url": "/static/images/8c01a87168c9.png",
+      "audio_url": null
+    },
+    {
+      "word": "grandiloquent",
+      "translation": "浮誇的",
+      "sentence": "His grandiloquent words sounded empty.",
+      "sentence_zh": "他浮誇的話聽起來很空洞。",
+      "image_url": "/static/images/b37d2ca024a5.png",
+      "audio_url": null
+    },
+    {
+      "word": "hegemony",
+      "translation": "霸權",
+      "sentence": "The country sought regional hegemony.",
+      "sentence_zh": "該國尋求區域霸權。",
+      "image_url": "/static/images/8f1d01dccf14.png",
+      "audio_url": null
+    },
+    {
+      "word": "heterodox",
+      "translation": "非正統的",
+      "sentence": "Her heterodox views sparked debate.",
+      "sentence_zh": "她非正統的觀點引發討論。",
+      "image_url": "/static/images/ab63d3f8c920.png",
+      "audio_url": null
+    },
+    {
+      "word": "hubris",
+      "translation": "傲慢",
+      "sentence": "His hubris led to failure.",
+      "sentence_zh": "他的傲慢導致失敗。",
+      "image_url": "/static/images/27a4fc42bbec.png",
+      "audio_url": null
+    },
+    {
+      "word": "impute",
+      "translation": "歸咎",
+      "sentence": "They imputed the delay to bad planning.",
+      "sentence_zh": "他們把延誤歸咎於規劃不佳。",
+      "image_url": "/static/images/3b4131235fb2.png",
+      "audio_url": null
+    },
+    {
+      "word": "inimical",
+      "translation": "有害的",
+      "sentence": "His comments were inimical to trust.",
+      "sentence_zh": "他的評論不利於信任。",
+      "image_url": "/static/images/b6a986f46d6c.png",
+      "audio_url": null
+    },
+    {
+      "word": "inure",
+      "translation": "使習慣",
+      "sentence": "He is inured to criticism now.",
+      "sentence_zh": "他現在已習慣批評。",
+      "image_url": "/static/images/15f591ddf847.png",
+      "audio_url": null
+    },
+    {
+      "word": "inveterate",
+      "translation": "根深蒂固的",
+      "sentence": "He is an inveterate smoker.",
+      "sentence_zh": "他是多年老菸槍。",
+      "image_url": "/static/images/4b0b539ddfb6.png",
+      "audio_url": null
+    },
+    {
+      "word": "irascible",
+      "translation": "易怒的",
+      "sentence": "The irascible boss shouted again.",
+      "sentence_zh": "那位易怒的老闆又大吼。",
+      "image_url": "/static/images/091997ce73d9.png",
+      "audio_url": null
+    },
+    {
+      "word": "itinerant",
+      "translation": "巡迴的",
+      "sentence": "He worked as an itinerant teacher.",
+      "sentence_zh": "他當過巡迴教師。",
+      "image_url": "/static/images/1d9f66fedafd.png",
+      "audio_url": null
+    },
+    {
+      "word": "jettison",
+      "translation": "拋棄",
+      "sentence": "They jettisoned the old plan quickly.",
+      "sentence_zh": "他們很快拋棄了舊計畫。",
+      "image_url": "/static/images/1b3d088521c1.png",
+      "audio_url": null
+    },
+    {
+      "word": "jurisprudence",
+      "translation": "法理學",
+      "sentence": "She studies jurisprudence at university.",
+      "sentence_zh": "她在大學研習法理學。",
+      "image_url": "/static/images/39f3a23ac014.png",
+      "audio_url": null
+    },
+    {
+      "word": "kowtow",
+      "translation": "卑躬屈膝",
+      "sentence": "He refused to kowtow to power.",
+      "sentence_zh": "他拒絕向權力卑躬屈膝。",
+      "image_url": "/static/images/a0c54dbec97c.png",
+      "audio_url": null
+    },
+    {
+      "word": "lambaste",
+      "translation": "嚴厲抨擊",
+      "sentence": "The critics lambasted the film.",
+      "sentence_zh": "影評人嚴厲抨擊那部電影。",
+      "image_url": "/static/images/7907f98cc708.png",
+      "audio_url": null
+    },
+    {
+      "word": "legerdemain",
+      "translation": "戲法",
+      "sentence": "They used financial legerdemain.",
+      "sentence_zh": "他們使用了財務花招。",
+      "image_url": "/static/images/e85e8603dc5e.png",
+      "audio_url": null
+    },
+    {
+      "word": "limpid",
+      "translation": "清澈的",
+      "sentence": "Her explanation was limpid.",
+      "sentence_zh": "她的解釋很清晰。",
+      "image_url": "/static/images/30d66eaaa9ff.png",
+      "audio_url": null
+    },
+    {
+      "word": "malinger",
+      "translation": "裝病",
+      "sentence": "He was caught trying to malinger.",
+      "sentence_zh": "他被抓到企圖裝病偷懶。",
+      "image_url": "/static/images/47d10d96b8af.png",
+      "audio_url": null
+    },
+    {
+      "word": "maudlin",
+      "translation": "感傷的",
+      "sentence": "He became maudlin after the song.",
+      "sentence_zh": "聽完那首歌他變得很感傷。",
+      "image_url": "/static/images/b5319e978a71.png",
+      "audio_url": null
+    },
+    {
+      "word": "mercurial",
+      "translation": "善變的",
+      "sentence": "Her mercurial mood was hard to predict.",
+      "sentence_zh": "她善變的情緒很難預測。",
+      "image_url": "/static/images/17d2362fd241.png",
+      "audio_url": null
+    },
+    {
+      "word": "meticulous",
+      "translation": "一絲不苟的",
+      "sentence": "He is meticulous about his notes.",
+      "sentence_zh": "他做筆記非常細心。",
+      "image_url": "/static/images/18c93330bc27.png",
+      "audio_url": null
+    },
+    {
+      "word": "myopic",
+      "translation": "短視的",
+      "sentence": "It was a myopic decision.",
+      "sentence_zh": "那是個短視的決定。",
+      "image_url": "/static/images/07c947738998.png",
+      "audio_url": null
+    },
+    {
+      "word": "nugatory",
+      "translation": "無關緊要的",
+      "sentence": "The cost is nugatory compared with the risk.",
+      "sentence_zh": "與風險相比，成本微不足道。",
+      "image_url": "/static/images/c80cfa493b62.png",
+      "audio_url": null
+    },
+    {
+      "word": "obsequious",
+      "translation": "諂媚的",
+      "sentence": "An obsequious assistant praised everything.",
+      "sentence_zh": "諂媚的助理對什麼都讚美。",
+      "image_url": "/static/images/dfee77ca3257.png",
+      "audio_url": null
+    },
+    {
+      "word": "officious",
+      "translation": "好管閒事的",
+      "sentence": "An officious stranger gave unwanted advice.",
+      "sentence_zh": "愛插手的陌生人給了不請自來的建議。",
+      "image_url": "/static/images/fe2d92c5d03c.png",
+      "audio_url": null
+    },
+    {
+      "word": "opprobrium",
+      "translation": "譴責",
+      "sentence": "He faced opprobrium after the scandal.",
+      "sentence_zh": "醜聞後他面臨譴責與惡名。",
+      "image_url": "/static/images/134deac5b616.png",
+      "audio_url": null
+    },
+    {
+      "word": "palliate",
+      "translation": "緩和",
+      "sentence": "The measure may palliate the crisis.",
+      "sentence_zh": "這項措施可能緩和危機。",
+      "image_url": "/static/images/efc1e48d5ed8.png",
+      "audio_url": null
+    },
+    {
+      "word": "panacea",
+      "translation": "萬靈丹",
+      "sentence": "Technology is not a panacea.",
+      "sentence_zh": "科技不是萬能解方。",
+      "image_url": "/static/images/7d9563b17f56.png",
+      "audio_url": null
+    },
+    {
+      "word": "penurious",
+      "translation": "貧困的",
+      "sentence": "They lived a penurious life for years.",
+      "sentence_zh": "他們多年過著貧困生活。",
+      "image_url": "/static/images/6a2fc9b67103.png",
+      "audio_url": null
+    },
+    {
+      "word": "peremptory",
+      "translation": "專橫的",
+      "sentence": "His peremptory order ended the debate.",
+      "sentence_zh": "他專橫的命令結束了爭論。",
+      "image_url": "/static/images/3ead8af6d464.png",
+      "audio_url": null
+    },
+    {
+      "word": "phlegmatic",
+      "translation": "冷靜的",
+      "sentence": "She stayed phlegmatic in the chaos.",
+      "sentence_zh": "在混亂中她仍保持冷靜。",
+      "image_url": "/static/images/d902f07c951a.png",
+      "audio_url": null
+    },
+    {
+      "word": "polemical",
+      "translation": "好辯的",
+      "sentence": "The article is polemical in tone.",
+      "sentence_zh": "這篇文章語氣很挑釁好辯。",
+      "image_url": "/static/images/f3f1376f385d.png",
+      "audio_url": null
+    },
+    {
+      "word": "propitious",
+      "translation": "有利的",
+      "sentence": "The timing is propitious for change.",
+      "sentence_zh": "時機對改變很有利。",
+      "image_url": "/static/images/f45b478ef421.png",
+      "audio_url": null
+    },
+    {
+      "word": "pusillanimous",
+      "translation": "怯懦的",
+      "sentence": "A pusillanimous response will not help.",
+      "sentence_zh": "怯懦的回應無濟於事。",
+      "image_url": "/static/images/ccc61c2be31e.png",
+      "audio_url": null
+    },
+    {
+      "word": "recalcitrance",
+      "translation": "頑抗",
+      "sentence": "His recalcitrance slowed the project.",
+      "sentence_zh": "他的頑抗拖慢了專案。",
+      "image_url": "/static/images/28553624a98a.png",
+      "audio_url": null
+    },
+    {
+      "word": "recrudescent",
+      "translation": "復發的",
+      "sentence": "We saw recrudescent conflict in the area.",
+      "sentence_zh": "該地區出現衝突再度興起。",
+      "image_url": "/static/images/2123df36480f.png",
+      "audio_url": null
+    },
+    {
+      "word": "remonstrate",
+      "translation": "抗議",
+      "sentence": "She remonstrated with him about his tone.",
+      "sentence_zh": "她就他的語氣提出規勸。",
+      "image_url": "/static/images/46bdba9a4dfe.png",
+      "audio_url": null
+    },
+    {
+      "word": "reticent",
+      "translation": "沉默寡言的",
+      "sentence": "He was reticent about the details.",
+      "sentence_zh": "他不願透露細節。",
+      "image_url": "/static/images/e29e7e9252ea.png",
+      "audio_url": null
+    },
+    {
+      "word": "risible",
+      "translation": "可笑的",
+      "sentence": "The excuse was risible.",
+      "sentence_zh": "那個藉口很可笑。",
+      "image_url": "/static/images/cf0c5c3ca5b5.png",
+      "audio_url": null
+    },
+    {
+      "word": "sacrosanct",
+      "translation": "神聖不可侵犯的",
+      "sentence": "They treat privacy as sacrosanct.",
+      "sentence_zh": "他們把隱私視為不可侵犯。",
+      "image_url": "/static/images/42c04558e70a.png",
+      "audio_url": null
+    },
+    {
+      "word": "sophistry",
+      "translation": "詭辯",
+      "sentence": "His argument was mere sophistry.",
+      "sentence_zh": "他的論點只是詭辯。",
+      "image_url": "/static/images/77b4ed9b7bbc.png",
+      "audio_url": null
+    },
+    {
+      "word": "splenetic",
+      "translation": "易怒的",
+      "sentence": "He wrote a splenetic email.",
+      "sentence_zh": "他寫了一封充滿怨氣的郵件。",
+      "image_url": "/static/images/bf0e6bcfe045.png",
+      "audio_url": null
+    },
+    {
+      "word": "stentorian",
+      "translation": "洪亮的（聲音）",
+      "sentence": "Her stentorian voice filled the hall.",
+      "sentence_zh": "她洪亮的聲音充滿大廳。",
+      "image_url": "/static/images/43f39930e604.png",
+      "audio_url": null
+    },
+    {
+      "word": "subsume",
+      "translation": "把…歸入",
+      "sentence": "The plan subsumes several smaller projects.",
+      "sentence_zh": "該計畫包含數個小專案。",
+      "image_url": "/static/images/89cc40192256.png",
+      "audio_url": null
+    },
+    {
+      "word": "surreptitious",
+      "translation": "偷偷摸摸的",
+      "sentence": "They took a surreptitious photo.",
+      "sentence_zh": "他們偷偷拍了照片。",
+      "image_url": "/static/images/d421846c7c64.png",
+      "audio_url": null
+    },
+    {
+      "word": "temerity",
+      "translation": "魯莽",
+      "sentence": "He had the temerity to interrupt.",
+      "sentence_zh": "他竟魯莽地打斷。",
+      "image_url": "/static/images/31ae3b679131.png",
+      "audio_url": null
+    },
+    {
+      "word": "tortuous",
+      "translation": "曲折的",
+      "sentence": "The path was tortuous and slow.",
+      "sentence_zh": "路徑曲折又緩慢。",
+      "image_url": "/static/images/5dda1440ef24.png",
+      "audio_url": null
+    },
+    {
+      "word": "transmute",
+      "translation": "轉化",
+      "sentence": "The experience transmuted fear into focus.",
+      "sentence_zh": "那次經驗把恐懼轉化成專注。",
+      "image_url": "/static/images/508f35fdef69.png",
+      "audio_url": null
+    },
+    {
+      "word": "ulterior",
+      "translation": "別有用心的",
+      "sentence": "He seemed to have ulterior motives.",
+      "sentence_zh": "他似乎別有用心。",
+      "image_url": "/static/images/4e8389afc551.png",
+      "audio_url": null
+    },
+    {
+      "word": "vacillate",
+      "translation": "猶豫不決",
+      "sentence": "She vacillated between two choices.",
+      "sentence_zh": "她在兩個選項間猶豫不決。",
+      "image_url": "/static/images/45055432cfd3.png",
+      "audio_url": null
+    },
+    {
+      "word": "vitiate",
+      "translation": "損害",
+      "sentence": "The mistake vitiated the entire report.",
+      "sentence_zh": "這個錯誤使整份報告失效。",
+      "image_url": "/static/images/4994cf0882bb.png",
+      "audio_url": null
+    },
+    {
+      "word": "welter",
+      "translation": "混亂",
+      "sentence": "The office was in a welter of papers.",
+      "sentence_zh": "辦公室一片紙張混亂。",
+      "image_url": "/static/images/82951655be5c.png",
+      "audio_url": null
+    },
+    {
+      "word": "zeitgeist",
+      "translation": "時代精神",
+      "sentence": "The film captured the zeitgeist of its era.",
+      "sentence_zh": "那部電影捕捉到那個時代的精神。",
+      "image_url": "/static/images/32d43e441d3b.png",
+      "audio_url": null
+    }
+  ],
+  "clear_existing": true
+}
