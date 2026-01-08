@@ -34,6 +34,7 @@ ENV/
 # Environment
 .env
 .env.local
+.env.test
 
 # Database
 *.db
