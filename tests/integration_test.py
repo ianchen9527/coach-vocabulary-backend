@@ -14,9 +14,10 @@ Test Scenarios:
 5. Review Mode - Review Phase (Display)
 6. Review Mode - Practice Phase (Answer Correct → Back to P)
 7. Review Mode - Practice Phase (Answer Wrong → Stay in R)
-8. Daily Learn Limit
-9. P1 Pool Limit
+8. Daily Learn Limit (50 words)
+9. P1 Pool Limit (10 words)
 10. Complete P Pool Progression (P1 → P6)
+11. Exercise Type Verification
 
 Usage:
     # Start test server first (in another terminal):
@@ -109,6 +110,13 @@ class IntegrationTest:
             (is_in_review, word_id, self.user_id)
         )
 
+    def set_pool(self, word_id: str, pool: str):
+        """Set pool for a word."""
+        self.execute_sql(
+            "UPDATE word_progress SET pool = %s WHERE word_id = %s AND user_id = %s",
+            (pool, word_id, self.user_id)
+        )
+
     def get_word_progress(self, word_id: str) -> Optional[Dict]:
         """Get word progress from database."""
         result = self.execute_sql(
@@ -122,6 +130,22 @@ class IntegrationTest:
                 "next_available_time": result[0][2]
             }
         return None
+
+    def count_user_progress(self) -> int:
+        """Count total word progress records for user."""
+        result = self.execute_sql(
+            "SELECT COUNT(*) FROM word_progress WHERE user_id = %s",
+            (self.user_id,)
+        )
+        return result[0][0] if result else 0
+
+    def get_word_ids_from_db(self, limit: int = 50) -> List[str]:
+        """Get word IDs directly from database."""
+        result = self.execute_sql(
+            "SELECT id FROM words ORDER BY id LIMIT %s",
+            (limit,)
+        )
+        return [str(row[0]) for row in result] if result else []
 
     # === API Helpers ===
 
@@ -367,7 +391,8 @@ class IntegrationTest:
         print(f"\n{Colors.BOLD}Test 8: Review Session{Colors.RESET}")
 
         # Make R pool words available
-        self.set_word_time(self.r_pool_word_id, -1)
+        if hasattr(self, 'r_pool_word_id'):
+            self.set_word_time(self.r_pool_word_id, -1)
 
         resp = self.api_get("/api/review/session")
         data = resp.json()
@@ -394,6 +419,7 @@ class IntegrationTest:
 
         if data.get("available"):
             self.review_word_ids = [w["id"] for w in data.get("words", [])]
+            self.review_exercises = data.get("exercises", [])
 
     def _create_more_r_pool_words(self):
         """Helper to create more R pool words for testing."""
@@ -471,6 +497,10 @@ class IntegrationTest:
             self.record_result("R pool exercises found", False, "No R pool exercises in session")
             return
 
+        # Get the R pool number to verify correct return
+        r_pool = r_exercises[0].get("pool")  # e.g., "R2"
+        expected_p_pool = "P" + r_pool[1]  # e.g., "P2"
+
         # Answer R pool word correct
         answers = [{"word_id": r_exercises[0]["word_id"], "correct": True}]
 
@@ -487,23 +517,131 @@ class IntegrationTest:
 
         if r_result:
             self.record_result(
-                "R pool word returns to P pool on correct",
-                r_result.get("new_pool", "").startswith("P"),
-                f"previous: {r_result.get('previous_pool')}, new: {r_result.get('new_pool')}"
+                f"R pool word returns to correct P pool ({r_pool} → {expected_p_pool})",
+                r_result.get("new_pool") == expected_p_pool,
+                f"previous: {r_result.get('previous_pool')}, new: {r_result.get('new_pool')}, expected: {expected_p_pool}"
+            )
+        else:
+            self.record_result("R pool result found", False, "No result for R pool word")
+
+    def test_11_r_pool_practice_wrong(self):
+        """Test R pool practice phase - answer wrong stays in R pool."""
+        print(f"\n{Colors.BOLD}Test 11: R Pool Practice Wrong (Stay in R){Colors.RESET}")
+
+        # Reset and create fresh user for isolation
+        self.reset_test_data()
+        resp = requests.post(f"{self.base_url}/api/auth/login", json={"username": "r_pool_wrong_test"})
+        self.user_id = resp.json().get("id")
+
+        # Learn 5 words
+        resp = self.api_get("/api/learn/session")
+        if not resp.json().get("available"):
+            self.record_result("Learn for R pool test", False, "Cannot learn new words")
+            return
+
+        words = resp.json().get("words", [])
+        word_ids = [w["id"] for w in words]
+        target_word_id = word_ids[0]
+        self.api_post("/api/learn/complete", {"word_ids": word_ids})
+
+        # Make all words available for practice
+        for wid in word_ids:
+            self.set_word_time(wid, -1)
+
+        # Get practice and make target word wrong (moves to R1)
+        resp = self.api_get("/api/practice/session")
+        if not resp.json().get("available"):
+            self.record_result("Practice available", False, "Practice not available")
+            return
+
+        exercises = resp.json().get("exercises", [])
+        answers = []
+        for e in exercises:
+            # Answer wrong for target word only
+            answers.append({"word_id": e["word_id"], "correct": e["word_id"] != target_word_id})
+
+        resp = self.api_post("/api/practice/submit", {"answers": answers})
+
+        # Verify target word moved to R1 (since it was in P1)
+        progress = self.get_word_progress(target_word_id)
+        if not progress or progress["pool"] != "R1":
+            self.record_result("Word moved to R1", False, f"pool: {progress['pool'] if progress else 'None'}")
+            return
+
+        self.record_result(
+            "Word moved to R1 with review phase",
+            progress["is_in_review_phase"] == True,
+            f"is_in_review_phase: {progress['is_in_review_phase']}"
+        )
+
+        # Complete review phase for target word (simulate review complete)
+        self.set_review_phase(target_word_id, False)
+        self.set_word_time(target_word_id, -1)
+
+        # Make other 4 words available for practice (need 5 total)
+        for wid in word_ids[1:]:
+            self.set_word_time(wid, -1)
+
+        # Get practice session - R1 word in practice phase should be included
+        resp = self.api_get("/api/practice/session")
+        if not resp.json().get("available"):
+            self.record_result("R pool practice available", False, "Practice not available")
+            return
+
+        exercises = resp.json().get("exercises", [])
+        r_exercise = next((e for e in exercises if e.get("word_id") == target_word_id), None)
+
+        if not r_exercise:
+            self.record_result("R pool word in practice", False, "R pool word not in practice session")
+            return
+
+        # Answer wrong again
+        answers = []
+        for e in exercises:
+            answers.append({"word_id": e["word_id"], "correct": e["word_id"] != target_word_id})
+
+        resp = self.api_post("/api/practice/submit", {"answers": answers})
+        data = resp.json()
+
+        # Find result for our word
+        result = next((r for r in data.get("results", []) if r.get("word_id") == target_word_id), None)
+
+        if result:
+            self.record_result(
+                "R pool word stays in R pool on wrong answer",
+                result.get("previous_pool") == "R1" and result.get("new_pool") == "R1",
+                f"previous: {result.get('previous_pool')}, new: {result.get('new_pool')}"
             )
 
-    def test_11_p_pool_full_progression(self):
-        """Test complete P pool progression P1 → P2 → P3 → P4 → P5 → P6."""
-        print(f"\n{Colors.BOLD}Test 11: Complete P Pool Progression{Colors.RESET}")
+            # Verify re-entered review phase
+            progress = self.get_word_progress(target_word_id)
+            self.record_result(
+                "R pool word re-enters review phase",
+                progress and progress.get("is_in_review_phase") == True,
+                f"is_in_review_phase: {progress.get('is_in_review_phase') if progress else 'None'}"
+            )
+        else:
+            self.record_result("R pool result found", False, "No result for R pool word")
 
-        # Learn a new word
+    def test_12_p_pool_full_progression(self):
+        """Test complete P pool progression P1 → P2 → P3 → P4 → P5 → P6 with exercise type verification."""
+        print(f"\n{Colors.BOLD}Test 12: Complete P Pool Progression{Colors.RESET}")
+
+        # Reset and create fresh user for isolation
+        self.reset_test_data()
+        resp = requests.post(f"{self.base_url}/api/auth/login", json={"username": "progression_test"})
+        self.user_id = resp.json().get("id")
+
+        # Learn 5 words (minimum for practice)
         resp = self.api_get("/api/learn/session")
         if not resp.json().get("available"):
             self.record_result("Learn for progression", False, "Cannot learn new words")
             return
 
-        word_id = resp.json().get("words", [{}])[0].get("id")
-        self.api_post("/api/learn/complete", {"word_ids": [word_id]})
+        words = resp.json().get("words", [])
+        all_word_ids = [w["id"] for w in words]
+        word_id = all_word_ids[0]  # Track first word through progression
+        self.api_post("/api/learn/complete", {"word_ids": all_word_ids})
 
         expected_progression = [
             ("P1", "P2", "reading_lv1"),
@@ -514,8 +652,9 @@ class IntegrationTest:
         ]
 
         for from_pool, to_pool, expected_type in expected_progression:
-            # Make word available
-            self.set_word_time(word_id, -1)
+            # Make ALL words available for practice (need 5 minimum)
+            for wid in all_word_ids:
+                self.set_word_time(wid, -1)
 
             # Get current pool
             progress = self.get_word_progress(word_id)
@@ -532,9 +671,12 @@ class IntegrationTest:
             # Practice
             resp = self.api_get("/api/practice/session")
             if not resp.json().get("available"):
-                # May not have enough words, add dummy words
-                self._ensure_practice_available()
-                resp = self.api_get("/api/practice/session")
+                self.record_result(
+                    f"Progression {from_pool} → {to_pool}",
+                    False,
+                    f"Practice not available"
+                )
+                continue
 
             exercises = resp.json().get("exercises", [])
             target_exercise = next((e for e in exercises if e.get("word_id") == word_id), None)
@@ -547,17 +689,116 @@ class IntegrationTest:
                 )
                 continue
 
+            # Verify exercise type
+            actual_type = target_exercise.get("type")
+            type_matches = actual_type == expected_type
+
             # Submit correct answer
             answers = [{"word_id": e["word_id"], "correct": True} for e in exercises]
             resp = self.api_post("/api/practice/submit", {"answers": answers})
 
             result = next((r for r in resp.json().get("results", []) if r.get("word_id") == word_id), None)
 
+            pool_correct = result and result.get("new_pool") == to_pool
+
             self.record_result(
-                f"Progression {from_pool} → {to_pool}",
-                result and result.get("new_pool") == to_pool,
-                f"new_pool: {result.get('new_pool') if result else 'None'}"
+                f"Progression {from_pool} → {to_pool} (type: {expected_type})",
+                pool_correct and type_matches,
+                f"new_pool: {result.get('new_pool') if result else 'None'}, type: {actual_type}, expected_type: {expected_type}"
             )
+
+    def test_13_daily_limit(self):
+        """Test daily learn limit (50 words)."""
+        print(f"\n{Colors.BOLD}Test 13: Daily Learn Limit (50 words){Colors.RESET}")
+
+        # Reset and create fresh user
+        self.reset_test_data()
+        resp = requests.post(f"{self.base_url}/api/auth/login", json={"username": "limit_test_user"})
+        self.user_id = resp.json().get("id")
+
+        # Get word IDs directly from DB
+        word_ids = self.get_word_ids_from_db(55)
+
+        # Create 50 word progress records as learned today
+        today = datetime.now(timezone.utc).replace(hour=1, minute=0, second=0, microsecond=0)
+
+        for i, word_id in enumerate(word_ids[:50]):
+            self.execute_sql(
+                """
+                INSERT INTO word_progress (id, user_id, word_id, pool, learned_at, next_available_time, is_in_review_phase)
+                VALUES (gen_random_uuid(), %s, %s::uuid, 'P1', %s, %s, FALSE)
+                """,
+                (self.user_id, word_id, today, today + timedelta(minutes=10))
+            )
+
+        # Check stats
+        stats = self.api_get("/api/home/stats").json()
+
+        self.record_result(
+            "Today learned count is 50",
+            stats.get("today_learned") == 50,
+            f"today_learned: {stats.get('today_learned')}"
+        )
+
+        self.record_result(
+            "Can learn is False (daily limit reached)",
+            stats.get("can_learn") == False,
+            f"can_learn: {stats.get('can_learn')}"
+        )
+
+        # Try to get learn session
+        resp = self.api_get("/api/learn/session")
+        data = resp.json()
+
+        self.record_result(
+            "Learn session returns daily_limit_reached",
+            data.get("available") == False and data.get("reason") == "daily_limit_reached",
+            f"available: {data.get('available')}, reason: {data.get('reason')}"
+        )
+
+    def test_14_p1_pool_limit(self):
+        """Test P1 pool limit (10 words upcoming)."""
+        print(f"\n{Colors.BOLD}Test 14: P1 Pool Limit (10 words){Colors.RESET}")
+
+        # Reset and create fresh user
+        self.reset_test_data()
+        resp = requests.post(f"{self.base_url}/api/auth/login", json={"username": "p1_limit_test_user"})
+        self.user_id = resp.json().get("id")
+
+        # Get word IDs directly from DB
+        word_ids = self.get_word_ids_from_db(15)
+
+        # Create 10 P1 words with next_available_time within 10 minutes
+        now = datetime.now(timezone.utc)
+        yesterday = now - timedelta(days=1)  # learned_at is yesterday so it doesn't count toward daily limit
+
+        for i, word_id in enumerate(word_ids[:10]):
+            self.execute_sql(
+                """
+                INSERT INTO word_progress (id, user_id, word_id, pool, learned_at, next_available_time, is_in_review_phase)
+                VALUES (gen_random_uuid(), %s, %s::uuid, 'P1', %s, %s, FALSE)
+                """,
+                (self.user_id, word_id, yesterday, now + timedelta(minutes=5))  # 5 minutes from now
+            )
+
+        # Check stats
+        stats = self.api_get("/api/home/stats").json()
+
+        self.record_result(
+            "Can learn is False (P1 pool full)",
+            stats.get("can_learn") == False,
+            f"can_learn: {stats.get('can_learn')}"
+        )
+
+        # Try to get learn session
+        resp = self.api_get("/api/learn/session")
+        data = resp.json()
+
+        self.record_result(
+            "Learn session returns p1_pool_full",
+            data.get("available") == False and data.get("reason") == "p1_pool_full",
+            f"available: {data.get('available')}, reason: {data.get('reason')}"
+        )
 
     def _ensure_practice_available(self):
         """Ensure enough words are available for practice."""
@@ -569,39 +810,6 @@ class IntegrationTest:
                 self.api_post("/api/learn/complete", {"word_ids": word_ids})
                 for wid in word_ids:
                     self.set_word_time(wid, -1)
-
-    def test_12_daily_limit(self):
-        """Test daily learn limit (50 words)."""
-        print(f"\n{Colors.BOLD}Test 12: Daily Learn Limit{Colors.RESET}")
-
-        # Get current today_learned count
-        resp = self.api_get("/api/home/stats")
-        current_learned = resp.json().get("today_learned", 0)
-
-        # Update database to simulate words learned today
-        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-
-        # Set all existing progress records as learned today
-        self.execute_sql(
-            """
-            UPDATE word_progress
-            SET learned_at = %s
-            WHERE user_id = %s
-            """,
-            (today_start + timedelta(hours=1), self.user_id)
-        )
-
-        resp = self.api_get("/api/learn/session")
-        data = resp.json()
-
-        # Check if limit is enforced (may or may not hit 50 depending on test state)
-        stats = self.api_get("/api/home/stats").json()
-
-        self.record_result(
-            "Daily limit check",
-            True,  # Just verify the logic exists
-            f"today_learned: {stats.get('today_learned')}, can_learn: {stats.get('can_learn')}"
-        )
 
     def run_all_tests(self):
         """Run all integration tests."""
@@ -625,8 +833,10 @@ class IntegrationTest:
             self.test_08_review_session()
             self.test_09_review_complete()
             self.test_10_r_pool_practice_correct()
-            self.test_11_p_pool_full_progression()
-            self.test_12_daily_limit()
+            self.test_11_r_pool_practice_wrong()
+            self.test_12_p_pool_full_progression()
+            self.test_13_daily_limit()
+            self.test_14_p1_pool_limit()
 
         except Exception as e:
             print(f"\n{Colors.RED}Error during tests: {e}{Colors.RESET}")
@@ -635,8 +845,8 @@ class IntegrationTest:
         finally:
             self.teardown_db()
 
-        # Print summary
-        self.print_summary()
+        # Print summary and return success status
+        return self.print_summary()
 
     def print_summary(self):
         """Print test summary."""
