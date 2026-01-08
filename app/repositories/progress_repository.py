@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Dict, Any
 from uuid import UUID
-from sqlalchemy import and_, or_, func
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.word import Word
@@ -11,9 +11,6 @@ from app.utils.constants import (
     P1_UPCOMING_LIMIT,
     PRACTICE_MIN_WORDS,
     REVIEW_MIN_WORDS,
-    REVIEW_MAX_WORDS,
-    LEARN_SESSION_SIZE,
-    PRACTICE_SESSION_SIZE,
 )
 
 
@@ -34,7 +31,7 @@ class ProgressRepository:
         )
 
     def get_user_progress(self, user_id: UUID) -> List[WordProgress]:
-        """Get all progress records for a user."""
+        """Get all progress records for a user (excludes P0)."""
         return (
             self.db.query(WordProgress)
             .options(joinedload(WordProgress.word))
@@ -42,10 +39,51 @@ class ProgressRepository:
             .all()
         )
 
+    def get_p0_words(self, user_id: UUID, limit: Optional[int] = None) -> List[Word]:
+        """
+        Get P0 words (words without any progress record for this user).
+        """
+        # Subquery to get word_ids that have progress for this user
+        learned_word_ids = (
+            self.db.query(WordProgress.word_id)
+            .filter(WordProgress.user_id == user_id)
+            .subquery()
+        )
+
+        # Get words not in the learned list
+        query = (
+            self.db.query(Word)
+            .filter(Word.id.notin_(learned_word_ids))
+            .order_by(Word.id)
+        )
+
+        if limit:
+            query = query.limit(limit)
+
+        return query.all()
+
+    def count_p0_words(self, user_id: UUID) -> int:
+        """Count P0 words (words without any progress record for this user)."""
+        learned_word_ids = (
+            self.db.query(WordProgress.word_id)
+            .filter(WordProgress.user_id == user_id)
+            .subquery()
+        )
+
+        return (
+            self.db.query(Word)
+            .filter(Word.id.notin_(learned_word_ids))
+            .count()
+        )
+
     def get_words_in_pool(
         self, user_id: UUID, pool: str
     ) -> List[WordProgress]:
         """Get all words in a specific pool for a user."""
+        if pool == "P0":
+            # P0 is special - return empty list, use get_p0_words instead
+            return []
+
         return (
             self.db.query(WordProgress)
             .options(joinedload(WordProgress.word))
@@ -60,6 +98,11 @@ class ProgressRepository:
         self, user_id: UUID, pools: List[str]
     ) -> List[WordProgress]:
         """Get all words in specific pools for a user."""
+        # Filter out P0 as it's not stored
+        pools = [p for p in pools if p != "P0"]
+        if not pools:
+            return []
+
         return (
             self.db.query(WordProgress)
             .options(joinedload(WordProgress.word))
@@ -72,6 +115,9 @@ class ProgressRepository:
 
     def count_words_in_pool(self, user_id: UUID, pool: str) -> int:
         """Count words in a specific pool."""
+        if pool == "P0":
+            return self.count_p0_words(user_id)
+
         return (
             self.db.query(WordProgress)
             .filter(
@@ -250,28 +296,30 @@ class ProgressRepository:
         )
         return result
 
-    def initialize_user_progress(self, user_id: UUID, words: List[Word]) -> int:
-        """
-        Initialize progress records for all words for a user.
-        All words start in P0 pool.
-
-        Returns:
-            Number of records created
-        """
-        count = 0
-        for word in words:
-            existing = self.get_by_user_and_word(user_id, word.id)
-            if not existing:
-                progress = WordProgress(
-                    user_id=user_id,
-                    word_id=word.id,
-                    pool="P0",
-                )
-                self.db.add(progress)
-                count += 1
-
+    def create_progress(
+        self,
+        user_id: UUID,
+        word_id: UUID,
+        pool: str,
+        learned_at: Optional[datetime] = None,
+        last_practice_time: Optional[datetime] = None,
+        next_available_time: Optional[datetime] = None,
+        is_in_review_phase: bool = False,
+    ) -> WordProgress:
+        """Create a new progress record."""
+        progress = WordProgress(
+            user_id=user_id,
+            word_id=word_id,
+            pool=pool,
+            learned_at=learned_at,
+            last_practice_time=last_practice_time,
+            next_available_time=next_available_time,
+            is_in_review_phase=is_in_review_phase,
+        )
+        self.db.add(progress)
         self.db.commit()
-        return count
+        self.db.refresh(progress)
+        return progress
 
     def update_progress(
         self,
@@ -303,7 +351,7 @@ class ProgressRepository:
 
     def reset_user_progress(self, user_id: UUID) -> int:
         """
-        Reset all progress for a user (all words back to P0).
+        Reset all progress for a user (delete all records, words go back to P0).
 
         Returns:
             Number of words reset
@@ -311,23 +359,17 @@ class ProgressRepository:
         count = (
             self.db.query(WordProgress)
             .filter(WordProgress.user_id == user_id)
-            .update({
-                WordProgress.pool: "P0",
-                WordProgress.learned_at: None,
-                WordProgress.last_practice_time: None,
-                WordProgress.next_available_time: None,
-                WordProgress.is_in_review_phase: False,
-                WordProgress.review_completed_time: None,
-            })
+            .delete()
         )
         self.db.commit()
         return count
 
     def get_pool_summary(self, user_id: UUID) -> Dict[str, List[Dict[str, Any]]]:
         """Get all words grouped by pool."""
+        # Get all progress records (P1-P6, R1-R5)
         all_progress = self.get_user_progress(user_id)
 
-        pools = {
+        pools: Dict[str, List[Dict[str, Any]]] = {
             "P0": [], "P1": [], "P2": [], "P3": [], "P4": [], "P5": [], "P6": [],
             "R1": [], "R2": [], "R3": [], "R4": [], "R5": [],
         }
@@ -342,6 +384,16 @@ class ProgressRepository:
                     if progress.next_available_time
                     else None
                 ),
+            })
+
+        # Get P0 words (no progress record)
+        p0_words = self.get_p0_words(user_id)
+        for word in p0_words:
+            pools["P0"].append({
+                "word_id": str(word.id),
+                "word": word.word,
+                "translation": word.translation,
+                "next_available_time": None,
             })
 
         return pools
@@ -364,7 +416,7 @@ class ProgressRepository:
             return False, "p1_pool_full"
 
         # Check if P0 has words
-        p0_count = self.count_words_in_pool(user_id, "P0")
+        p0_count = self.count_p0_words(user_id)
         if p0_count == 0:
             return False, "no_words_in_p0"
 

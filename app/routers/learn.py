@@ -39,11 +39,10 @@ def get_learn_session(
             exercises=[],
         )
 
-    # Get P0 words for this session
-    p0_progress = progress_repo.get_words_in_pool(user_id, "P0")
-    session_progress = p0_progress[:LEARN_SESSION_SIZE]
+    # Get P0 words for this session (words without progress records)
+    p0_words = progress_repo.get_p0_words(user_id, limit=LEARN_SESSION_SIZE)
 
-    if not session_progress:
+    if not p0_words:
         return LearnSessionResponse(
             available=False,
             reason="no_words_in_p0",
@@ -53,18 +52,16 @@ def get_learn_session(
 
     # Get all words for generating options
     all_words = word_repo.get_all()
-    session_words = [p.word for p in session_progress]
 
     # Build word details and exercises
     words = []
     exercises = []
 
-    for progress in session_progress:
-        word = progress.word
+    for word in p0_words:
         words.append(WordDetailSchema(**build_word_detail(word)))
 
         # Build exercise
-        exercise_data = build_learn_exercise(word, all_words, session_words)
+        exercise_data = build_learn_exercise(word, all_words, p0_words)
         exercises.append(ExerciseSchema(
             word_id=exercise_data["word_id"],
             type=exercise_data["type"],
@@ -88,6 +85,7 @@ def complete_learn(
 ):
     """Complete learning session, move words from P0 to P1."""
     progress_repo = ProgressRepository(db)
+    word_repo = WordRepository(db)
 
     now = datetime.now(timezone.utc)
     next_time = get_next_available_time("P1")
@@ -99,16 +97,20 @@ def complete_learn(
         except ValueError:
             raise HTTPException(status_code=400, detail=f"Invalid word_id: {word_id_str}")
 
-        progress = progress_repo.get_by_user_and_word(user_id, word_id)
-        if not progress:
-            raise HTTPException(status_code=404, detail=f"Progress not found for word: {word_id_str}")
+        # Check if word exists
+        word = word_repo.get_by_id(word_id)
+        if not word:
+            raise HTTPException(status_code=404, detail=f"Word not found: {word_id_str}")
 
-        if progress.pool != "P0":
+        # Check if already has progress record (not in P0)
+        existing_progress = progress_repo.get_by_user_and_word(user_id, word_id)
+        if existing_progress:
             raise HTTPException(status_code=400, detail=f"Word {word_id_str} is not in P0 pool")
 
-        # Move to P1
-        progress_repo.update_progress(
-            progress,
+        # Create new progress record for P1
+        progress_repo.create_progress(
+            user_id=user_id,
+            word_id=word_id,
             pool="P1",
             learned_at=now,
             last_practice_time=now,
