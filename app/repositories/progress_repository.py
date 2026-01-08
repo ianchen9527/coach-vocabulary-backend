@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone, date
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Dict, Any
 from uuid import UUID
 from sqlalchemy import and_, or_, func
@@ -193,6 +193,20 @@ class ProgressRepository:
 
         return query.all()
 
+    def count_r_pool_practice(self, user_id: UUID) -> int:
+        """Count R pool words available for practice test."""
+        now = datetime.now(timezone.utc)
+        return (
+            self.db.query(WordProgress)
+            .filter(
+                WordProgress.user_id == user_id,
+                WordProgress.pool.in_(["R1", "R2", "R3", "R4", "R5"]),
+                WordProgress.is_in_review_phase == False,
+                WordProgress.next_available_time <= now,
+            )
+            .count()
+        )
+
     def count_upcoming_24h(self, user_id: UUID) -> int:
         """Count words that will be available in the next 24 hours."""
         now = datetime.now(timezone.utc)
@@ -359,12 +373,16 @@ class ProgressRepository:
     def can_practice(self, user_id: UUID) -> tuple[bool, Optional[str]]:
         """
         Check if user can start a practice session.
+        Includes both P pool practice and R pool practice phase words.
 
         Returns:
             tuple: (can_practice, reason if cannot)
         """
-        available = self.count_available_practice(user_id)
-        if available < PRACTICE_MIN_WORDS:
+        p_pool_available = self.count_available_practice(user_id)
+        r_pool_available = self.count_r_pool_practice(user_id)
+        total_available = p_pool_available + r_pool_available
+
+        if total_available < PRACTICE_MIN_WORDS:
             return False, "not_enough_words"
         return True, None
 

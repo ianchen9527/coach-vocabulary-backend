@@ -103,6 +103,9 @@ def complete_review(
     db: Session = Depends(get_db)
 ):
     """Complete review display phase, mark words for practice phase."""
+    if not request.word_ids:
+        raise HTTPException(status_code=400, detail="word_ids cannot be empty")
+
     progress_repo = ProgressRepository(db)
 
     now = datetime.now(timezone.utc)

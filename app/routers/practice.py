@@ -47,10 +47,14 @@ def get_practice_session(
             exercise_order=[],
         )
 
-    # Get available practice words
-    available_progress = progress_repo.get_available_practice_words(
-        user_id, limit=PRACTICE_SESSION_SIZE
-    )
+    # Get available practice words from P pools
+    p_pool_progress = progress_repo.get_available_practice_words(user_id)
+
+    # Get available practice words from R pools (practice phase, not review phase)
+    r_pool_progress = progress_repo.get_r_pool_practice_words(user_id)
+
+    # Combine and limit
+    available_progress = (p_pool_progress + r_pool_progress)[:PRACTICE_SESSION_SIZE]
 
     if len(available_progress) < PRACTICE_SESSION_SIZE:
         return PracticeSessionResponse(

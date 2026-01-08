@@ -19,7 +19,11 @@ def get_stats(
     progress_repo = ProgressRepository(db)
 
     today_learned = progress_repo.count_today_learned(user_id)
-    available_practice = progress_repo.count_available_practice(user_id)
+    # Include both P pool practice and R pool practice phase
+    available_practice = (
+        progress_repo.count_available_practice(user_id) +
+        progress_repo.count_r_pool_practice(user_id)
+    )
     available_review = progress_repo.count_available_review(user_id)
     upcoming_24h = progress_repo.count_upcoming_24h(user_id)
 

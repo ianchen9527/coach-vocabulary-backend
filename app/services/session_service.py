@@ -1,9 +1,7 @@
 import random
 from typing import List, Dict, Any, Optional
-from uuid import UUID
 
 from app.models.word import Word
-from app.models.word_progress import WordProgress
 from app.utils.constants import (
     OPTIONS_COUNT,
     POOL_EXERCISE_TYPES,
