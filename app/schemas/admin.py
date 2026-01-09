@@ -20,6 +20,8 @@ class WordInput(BaseModel):
     sentence_zh: Optional[str] = None
     image_url: Optional[str] = None
     audio_url: Optional[str] = None
+    level_id: Optional[int] = None
+    category_id: Optional[int] = None
 
 
 class SeedWordsRequest(BaseModel):
@@ -41,6 +43,8 @@ class WordOutput(BaseModel):
     sentence_zh: Optional[str] = None
     image_url: Optional[str] = None
     audio_url: Optional[str] = None
+    level_id: Optional[int] = None
+    category_id: Optional[int] = None
     created_at: datetime
 
 

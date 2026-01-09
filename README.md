@@ -121,6 +121,25 @@ coach-vocabulary-backend/
 └── README.md
 ```
 
+## 課程架構 (Curriculum)
+
+學習系統引入了「等級 (Level)」和「分類 (Category)」的機制：
+
+1. **等級 (Level)**：如 A1.1, A1.2, A2.1 等。
+2. **分類 (Category)**：如 "Basic Descriptors", "Time & Space" 等。
+
+### 學習流程
+- 系統會優先提供使用者「目前等級」與「目前分類」中的單字。
+- 當目前分類單字學完後，會自動進入同等級的下一個分類。
+- 當該等級所有分類學完後，會自動晉升到下一個等級。
+
+### 資料庫初始化
+執行以下指令來初始化等級與分類資料：
+
+```bash
+python scripts/seed_levels_and_categories.py
+```
+
 ## 池系統
 
 | 池 | 等待時間 | 測驗題型 |

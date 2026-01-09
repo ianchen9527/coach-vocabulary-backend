@@ -32,6 +32,8 @@ class WordRepository:
         sentence_zh: Optional[str] = None,
         image_url: Optional[str] = None,
         audio_url: Optional[str] = None,
+        level_id: Optional[int] = None,
+        category_id: Optional[int] = None,
     ) -> Word:
         word_obj = Word(
             word=word,
@@ -40,6 +42,8 @@ class WordRepository:
             sentence_zh=sentence_zh,
             image_url=image_url,
             audio_url=audio_url,
+            level_id=level_id,
+            category_id=category_id,
         )
         self.db.add(word_obj)
         self.db.commit()
@@ -69,6 +73,8 @@ class WordRepository:
                 sentence_zh=data.get("sentence_zh"),
                 image_url=data.get("image_url"),
                 audio_url=data.get("audio_url"),
+                level_id=data.get("level_id"),
+                category_id=data.get("category_id"),
             )
             self.db.add(word_obj)
             imported += 1

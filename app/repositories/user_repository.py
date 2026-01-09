@@ -22,6 +22,16 @@ class UserRepository:
         self.db.refresh(user)
         return user
 
+    def update_level_category(self, user_id: UUID, level_id: int, category_id: int) -> User:
+        """Update user's current level and category."""
+        user = self.get_by_id(user_id)
+        if user:
+            user.current_level_id = level_id
+            user.current_category_id = category_id
+            self.db.commit()
+            self.db.refresh(user)
+        return user
+
     def get_or_create(self, username: str) -> tuple[User, bool]:
         """
         Get existing user or create new one.

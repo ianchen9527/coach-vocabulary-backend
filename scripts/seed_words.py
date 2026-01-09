@@ -54,7 +54,7 @@ def process_words():
         word = raw_word["word"]
 
         # Find image file
-        image_source = VOCAB_DIR / f"{word}.png"
+        image_source = VOCAB_DIR / raw_word.get("image_file")
         image_url = None
 
         if image_source.exists():
@@ -83,6 +83,8 @@ def process_words():
             "sentence_zh": raw_word.get("sentence_zh"),
             "image_url": image_url,
             "audio_url": None,  # Audio files not available yet
+            "level_id": raw_word.get("level_id"),
+            "category_id": raw_word.get("category_id"),
         }
         processed_words.append(processed_word)
 

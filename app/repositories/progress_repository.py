@@ -39,7 +39,13 @@ class ProgressRepository:
             .all()
         )
 
-    def get_p0_words(self, user_id: UUID, limit: Optional[int] = None) -> List[Word]:
+    def get_p0_words(
+        self,
+        user_id: UUID,
+        limit: Optional[int] = None,
+        level_id: Optional[int] = None,
+        category_id: Optional[int] = None,
+    ) -> List[Word]:
         """
         Get P0 words (words without any progress record for this user).
         """
@@ -54,8 +60,15 @@ class ProgressRepository:
         query = (
             self.db.query(Word)
             .filter(Word.id.notin_(learned_word_ids))
-            .order_by(Word.id)
         )
+
+        if level_id is not None:
+            query = query.filter(Word.level_id == level_id)
+        
+        if category_id is not None:
+            query = query.filter(Word.category_id == category_id)
+
+        query = query.order_by(Word.id)
 
         if limit:
             query = query.limit(limit)
