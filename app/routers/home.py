@@ -18,6 +18,13 @@ def get_stats(
     """Get home page statistics."""
     progress_repo = ProgressRepository(db)
 
+    # Get user info
+    from app.models.user import User
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="User not found")
+
     today_learned = progress_repo.count_today_learned(user_id)
     # Include both P pool practice and R pool practice phase
     available_practice = (
@@ -44,6 +51,16 @@ def get_stats(
         can_practice=can_practice,
         can_review=can_review,
         next_available_time=next_available_time,
+        current_level={
+            "id": user.current_level.id,
+            "order": user.current_level.order,
+            "label": user.current_level.label,
+        } if user.current_level else None,
+        current_category={
+            "id": user.current_category.id,
+            "order": user.current_category.order,
+            "label": user.current_category.label,
+        } if user.current_category else None,
     )
 
 

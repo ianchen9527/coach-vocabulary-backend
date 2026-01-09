@@ -1,5 +1,6 @@
 from typing import List, Optional
 from uuid import UUID
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models.word import Word
@@ -23,6 +24,15 @@ class WordRepository:
 
     def count(self) -> int:
         return self.db.query(Word).count()
+
+    def get_random_words_by_level(self, level_id: int, limit: int) -> List[Word]:
+        return (
+            self.db.query(Word)
+            .filter(Word.level_id == level_id)
+            .order_by(func.random())
+            .limit(limit)
+            .all()
+        )
 
     def create(
         self,

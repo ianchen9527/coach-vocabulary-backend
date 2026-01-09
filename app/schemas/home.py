@@ -12,6 +12,8 @@ class StatsResponse(BaseModel):
     can_practice: bool
     can_review: bool
     next_available_time: Optional[datetime] = None
+    current_level: Optional[Dict[str, Any]] = None
+    current_category: Optional[Dict[str, Any]] = None
 
 
 class WordPoolItem(BaseModel):

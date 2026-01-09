@@ -49,6 +49,12 @@ def get_learn_session(
     current_level_id = user.current_level_id
     current_category_id = user.current_category_id
 
+    if current_level_id is None or current_category_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Level analysis required"
+        )
+
     # Strategy:
     # 1. Fetch from current (level, category)
     # 2. If valid but < SIZE, fetch from next category/level in loop until full
@@ -80,9 +86,9 @@ def get_learn_session(
     temp_level_idx = curr_level_idx
     temp_cat_idx = curr_cat_idx
     
-    # Safety break
+    # Safety break: if we still have -1 (e.g. invalid IDs)
     if temp_level_idx == -1 or temp_cat_idx == -1:
-         # Fallback if pointers invalid (shouldn't happen with valid seed)
+         # Fallback if pointers invalid
          p0_words = progress_repo.get_p0_words(user_id, limit=LEARN_SESSION_SIZE)
          session_words = p0_words
     else: 

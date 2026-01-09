@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
-from app.routers import auth, home, learn, practice, review, admin
+from app.routers import auth, home, learn, practice, review, admin, level_analysis
 
 app = FastAPI(
     title="Coach Vocabulary API",
@@ -30,6 +30,7 @@ app.include_router(learn.router)
 app.include_router(practice.router)
 app.include_router(review.router)
 app.include_router(admin.router)
+app.include_router(level_analysis.router)
 
 
 @app.get("/")

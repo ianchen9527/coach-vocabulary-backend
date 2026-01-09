@@ -65,9 +65,21 @@ X-User-Id: <user-uuid>
   "can_learn": true,
   "can_practice": true,
   "can_review": true,
-  "next_available_time": "2024-01-08T11:30:00Z"
+  "next_available_time": "2024-01-08T11:30:00Z",
+  "current_level": {
+    "id": 1,
+    "order": 1,
+    "label": "A1.1"
+  },
+  "current_category": {
+    "id": 2,
+    "order": 2,
+    "label": "Basic Descriptors"
+  }
 }
 ```
+
+> **Note**: `current_level` and `current_category` may be `null` if the user hasn't started learning or completed level analysis.
 
 | 欄位 | 說明 |
 |------|------|
@@ -79,6 +91,8 @@ X-User-Id: <user-uuid>
 | can_practice | 是否可以開始練習模式 |
 | can_review | 是否可以開始複習模式 |
 | next_available_time | 下次最早可用時間（僅當無可用活動時） |
+| current_level | 目前等級物件 (id, order, label) 或 null |
+| current_category | 目前分類物件 (id, order, label) 或 null |
 
 ---
 
@@ -111,7 +125,70 @@ X-User-Id: <user-uuid>
 
 ---
 
-### 3. 學習 (Learn)
+---
+
+### 3. 程度分析 (Level Analysis)
+
+#### GET /api/level-analysis/session
+
+取得程度分析 Session。系統會從 8 個等級中各隨機抽選 10 個單字（共 80 題），題型均為 `reading_lv1`。
+
+**Headers:** `X-User-Id: <uuid>`
+
+**Response 200:**
+```json
+{
+  "exercises": [
+    {
+      "word_id": "...",
+      "word": "...",
+      "translation": "...",
+      "image_url": "...",
+      "audio_url": "...",
+      "pool": "P0",
+      "type": "reading_lv1",
+      "options": [...],
+      "correct_index": 1,
+      "level_order": 1
+    },
+    ...
+  ]
+}
+```
+
+#### POST /api/level-analysis/submit
+
+提交程度分析結果，更新用戶的目前等級。
+
+**Headers:** `X-User-Id: <uuid>`
+
+**Request Body:**
+```json
+{
+  "level_order": 2
+}
+```
+
+**Response 200:**
+```json
+{
+  "success": true,
+  "current_level": {
+    "id": 2,
+    "order": 2,
+    "label": "A1.2"
+  },
+  "current_category": {
+    "id": 1,
+    "order": 1,
+    "label": "Function Words"
+  }
+}
+```
+
+---
+
+### 4. 學習 (Learn)
 
 #### GET /api/learn/session
 
@@ -148,6 +225,13 @@ X-User-Id: <user-uuid>
       "correct_index": 1
     }
   ]
+}
+```
+
+**Response 400 (Bad Request):**
+```json
+{
+  "detail": "Level analysis required"
 }
 ```
 

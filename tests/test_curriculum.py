@@ -129,18 +129,33 @@ class CurriculumTest:
             self.user_id = data.get("id")
             
             # Verify initial level/category
-            # Need to fetch user from DB to verify defaults
+            # Should now be None
             user_row = self.execute_sql("SELECT current_level_id, current_category_id FROM users WHERE id = %s", (self.user_id,))
             self.record_result(
-                "Initial Level/Category is 1/1",
-                user_row and user_row[0][0] == 1 and user_row[0][1] == 1,
+                "Initial Level/Category is None",
+                user_row and user_row[0][0] is None and user_row[0][1] is None,
                 f"Got: {user_row}"
             )
 
-            # 2. Fetch Session (Should get L1 C1 words)
+            # 2. Fetch Session (Should FAIL initially)
+            print(f"\n{Colors.BOLD}Test 2: Fetch Session (Expect Error){Colors.RESET}")
+            resp = self.api_get("/api/learn/session")
+            self.record_result(
+                "Session fails without level analysis",
+                resp.status_code == 400,
+                f"Status: {resp.status_code}, Body: {resp.text}"
+            )
+            
+            # 2.1 Perform Level Analysis
+            print(f"\n{Colors.BOLD}Test 2.1: Submit Level Analysis{Colors.RESET}")
+            # Submit level 1
+            resp = self.api_post("/api/level-analysis/submit", {"level_order": 1})
+            self.record_result("Submit Level Analysis success", resp.status_code == 200)
+
+            # 2.2 Fetch Session (Should SUCCEED now)
             # We have 3 words in L1 C1. Session size is 5.
             # It should fetch 3 from L1 C1, then 2 from L1 C2.
-            print(f"\n{Colors.BOLD}Test 2: Fetch Session (Rollover Category){Colors.RESET}")
+            print(f"\n{Colors.BOLD}Test 2.2: Fetch Session (After Analysis){Colors.RESET}")
             resp = self.api_get("/api/learn/session")
             data = resp.json()
             words = data.get("words", [])

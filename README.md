@@ -66,6 +66,8 @@ API 將運行在 http://localhost:8000
 | Auth | `/api/auth/login` | POST | 登入/自動註冊 |
 | Home | `/api/home/stats` | GET | 首頁統計 |
 | Home | `/api/home/word-pool` | GET | 單字池列表 |
+| Level Analysis | `/api/level-analysis/session` | GET | 取得程度分析 Session |
+| Level Analysis | `/api/level-analysis/submit` | POST | 提交程度分析結果 |
 | Learn | `/api/learn/session` | GET | 取得學習 Session |
 | Learn | `/api/learn/complete` | POST | 完成學習 |
 | Practice | `/api/practice/session` | GET | 取得練習 Session |
@@ -81,8 +83,9 @@ API 將運行在 http://localhost:8000
 
 1. **登入**：POST `/api/auth/login` 取得 user ID
 2. **匯入單字**：POST `/api/admin/seed-words` 匯入單字庫
-3. **查看統計**：GET `/api/home/stats` 確認可用操作
-4. **開始學習**：GET `/api/learn/session` → POST `/api/learn/complete`
+3. **程度分析**：GET `/api/level-analysis/session` → POST `/api/level-analysis/submit` (可選)
+4. **查看統計**：GET `/api/home/stats` 確認目前等級與可用操作
+5. **開始學習**：GET `/api/learn/session` → POST `/api/learn/complete`
 5. **等待時間**：等待 10 分鐘後可以練習
 6. **開始練習**：GET `/api/practice/session` → POST `/api/practice/submit`
 
@@ -129,9 +132,12 @@ coach-vocabulary-backend/
 2. **分類 (Category)**：如 "Basic Descriptors", "Time & Space" 等。
 
 ### 學習流程
-- 系統會優先提供使用者「目前等級」與「目前分類」中的單字。
-- 當目前分類單字學完後，會自動進入同等級的下一個分類。
-- 當該等級所有分類學完後，會自動晉升到下一個等級。
+- **初始狀態**：新用戶的等級與分類預設為 `null` (未設定)。
+- **必要步驟**：若未設定等級，**必須先完成程度分析 (Level Analysis)** 才能開始學習。系統會拒絕未設定等級的學習請求。
+- **流程遞進**：
+    - 系統會優先提供使用者「目前等級」與「目前分類」中的單字。
+    - 當目前分類單字學完後，會自動進入同等級的下一個分類。
+    - 當該等級所有分類學完後，會自動晉升到下一個等級。
 
 ### 資料庫初始化
 執行以下指令來初始化等級與分類資料：
