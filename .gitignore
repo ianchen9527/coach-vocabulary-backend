@@ -52,11 +52,8 @@ Thumbs.db
 .coverage
 htmlcov/
 
-# Static files (keep directory structure)
-static/images/*
-!static/images/.gitkeep
-static/audio/*
-!static/audio/.gitkeep
+# Static files (served from GCS in production)
+static/
 
 # Raw vocabulary data (already seeded to database)
 words_seed/
