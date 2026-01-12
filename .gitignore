@@ -58,11 +58,10 @@ static/images/*
 static/audio/*
 !static/audio/.gitkeep
 
-# Raw vocabulary data (processed into data/seed_words.json)
+# Raw vocabulary data (already seeded to database)
+words_seed/
+vocab/
 vocab_all/
 vocab.zip
 words_all.json
-# Data files
 words.json
-vocab.zip
-vocab/
