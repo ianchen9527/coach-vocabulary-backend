@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.review import (
     ReviewSessionResponse,
     ReviewCompleteRequest,
@@ -34,12 +35,13 @@ router = APIRouter(prefix="/api/review", tags=["review"])
 
 @router.get("/session", response_model=ReviewSessionResponse)
 def get_review_session(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get a review session with 3-5 words in review phase."""
     progress_repo = ProgressRepository(db)
     word_repo = WordRepository(db)
+    user_id = current_user.id
 
     # Check if can review
     can_review, reason = progress_repo.can_review(user_id)
@@ -99,7 +101,7 @@ def get_review_session(
 @router.post("/complete", response_model=ReviewCompleteResponse)
 def complete_review(
     request: ReviewCompleteRequest,
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Complete review display phase, mark words for practice phase."""
@@ -107,6 +109,7 @@ def complete_review(
         raise HTTPException(status_code=400, detail="word_ids cannot be empty")
 
     progress_repo = ProgressRepository(db)
+    user_id = current_user.id
 
     now = datetime.now(timezone.utc)
     words_completed = 0
@@ -150,11 +153,12 @@ def complete_review(
 @router.post("/submit", response_model=ReviewSubmitResponse)
 def submit_review(
     request: ReviewSubmitRequest,
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Submit review test answers (R pool practice phase)."""
     progress_repo = ProgressRepository(db)
+    user_id = current_user.id
 
     now = datetime.now(timezone.utc)
     results = []

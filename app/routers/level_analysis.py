@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
 from app.schemas.level_analysis import (
     LevelAnalysisSessionResponse,
     LevelAnalysisSubmitRequest,
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/api/level-analysis", tags=["level-analysis"])
 
 @router.get("/session", response_model=LevelAnalysisSessionResponse)
 def get_analysis_session(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get random exercises from each level for analysis."""
@@ -65,14 +65,10 @@ def get_analysis_session(
 @router.post("/submit", response_model=LevelAnalysisSubmitResponse)
 def submit_analysis(
     request: LevelAnalysisSubmitRequest,
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Submit level analysis result and update user level."""
-    # Get user
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
         
     # Get level by order
     level = db.query(WordLevel).filter(WordLevel.order == request.level_order).first()
@@ -85,21 +81,21 @@ def submit_analysis(
         raise HTTPException(status_code=500, detail="Default category (order 1) not found")
         
     # Update user
-    user.current_level_id = level.id
-    user.current_category_id = category.id
+    current_user.current_level_id = level.id
+    current_user.current_category_id = category.id
     db.commit()
-    db.refresh(user)
-    
+    db.refresh(current_user)
+
     return LevelAnalysisSubmitResponse(
         success=True,
         current_level={
-            "id": user.current_level.id,
-            "order": user.current_level.order,
-            "label": user.current_level.label,
-        } if user.current_level else None,
+            "id": current_user.current_level.id,
+            "order": current_user.current_level.order,
+            "label": current_user.current_level.label,
+        } if current_user.current_level else None,
         current_category={
-            "id": user.current_category.id,
-            "order": user.current_category.order,
-            "label": user.current_category.label,
-        } if user.current_category else None,
+            "id": current_user.current_category.id,
+            "order": current_user.current_category.order,
+            "label": current_user.current_category.label,
+        } if current_user.current_category else None,
     )

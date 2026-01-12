@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.home import StatsResponse, WordPoolResponse, WordPoolItem
 from app.repositories.progress_repository import ProgressRepository
 from app.repositories.word_repository import WordRepository
@@ -12,18 +13,12 @@ router = APIRouter(prefix="/api/home", tags=["home"])
 
 @router.get("/stats", response_model=StatsResponse)
 def get_stats(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get home page statistics."""
     progress_repo = ProgressRepository(db)
-
-    # Get user info
-    from app.models.user import User
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="User not found")
+    user_id = current_user.id
 
     today_learned = progress_repo.count_today_learned(user_id)
     # Include both P pool practice and R pool practice phase
@@ -52,28 +47,28 @@ def get_stats(
         can_review=can_review,
         next_available_time=next_available_time,
         current_level={
-            "id": user.current_level.id,
-            "order": user.current_level.order,
-            "label": user.current_level.label,
-        } if user.current_level else None,
+            "id": current_user.current_level.id,
+            "order": current_user.current_level.order,
+            "label": current_user.current_level.label,
+        } if current_user.current_level else None,
         current_category={
-            "id": user.current_category.id,
-            "order": user.current_category.order,
-            "label": user.current_category.label,
-        } if user.current_category else None,
+            "id": current_user.current_category.id,
+            "order": current_user.current_category.order,
+            "label": current_user.current_category.label,
+        } if current_user.current_category else None,
     )
 
 
 @router.get("/word-pool", response_model=WordPoolResponse)
 def get_word_pool(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get all words grouped by pool (for debugging)."""
     progress_repo = ProgressRepository(db)
     word_repo = WordRepository(db)
 
-    pools = progress_repo.get_pool_summary(user_id)
+    pools = progress_repo.get_pool_summary(current_user.id)
     total_count = word_repo.count()
 
     # Convert to response format

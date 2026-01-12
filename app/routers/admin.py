@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.admin import (
     ResetProgressResponse,
     ResetCooldownResponse,
@@ -20,13 +21,13 @@ router = APIRouter(prefix="/api/admin", tags=["admin"])
 
 @router.post("/reset-progress", response_model=ResetProgressResponse)
 def reset_progress(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Reset all learning progress for a user (all words back to P0)."""
     progress_repo = ProgressRepository(db)
 
-    words_reset = progress_repo.reset_user_progress(user_id)
+    words_reset = progress_repo.reset_user_progress(current_user.id)
 
     return ResetProgressResponse(
         success=True,
@@ -36,7 +37,7 @@ def reset_progress(
 
 @router.post("/reset-cooldown", response_model=ResetCooldownResponse)
 def reset_cooldown(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -47,7 +48,7 @@ def reset_cooldown(
     """
     progress_repo = ProgressRepository(db)
 
-    words_affected = progress_repo.reset_cooldown(user_id)
+    words_affected = progress_repo.reset_cooldown(current_user.id)
 
     return ResetCooldownResponse(
         success=True,

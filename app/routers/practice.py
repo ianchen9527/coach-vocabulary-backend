@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.practice import (
     PracticeSessionResponse,
     PracticeSubmitRequest,
@@ -30,12 +31,13 @@ router = APIRouter(prefix="/api/practice", tags=["practice"])
 
 @router.get("/session", response_model=PracticeSessionResponse)
 def get_practice_session(
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get a practice session with 5 words."""
     progress_repo = ProgressRepository(db)
     word_repo = WordRepository(db)
+    user_id = current_user.id
 
     # Check if can practice
     can_practice, reason = progress_repo.can_practice(user_id)
@@ -109,11 +111,12 @@ def get_practice_session(
 @router.post("/submit", response_model=PracticeSubmitResponse)
 def submit_practice(
     request: PracticeSubmitRequest,
-    user_id: str = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Submit practice session answers."""
     progress_repo = ProgressRepository(db)
+    user_id = current_user.id
 
     now = datetime.now(timezone.utc)
     results = []

@@ -15,8 +15,17 @@ class UserRepository:
     def get_by_username(self, username: str) -> Optional[User]:
         return self.db.query(User).filter(User.username == username).first()
 
-    def create(self, username: str) -> User:
-        user = User(username=username)
+    def get_by_email(self, email: str) -> Optional[User]:
+        """Get user by email."""
+        return self.db.query(User).filter(User.email == email).first()
+
+    def create(self, email: str, username: str, hashed_password: str) -> User:
+        """Create a new user."""
+        user = User(
+            email=email,
+            username=username,
+            hashed_password=hashed_password
+        )
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
@@ -32,16 +41,10 @@ class UserRepository:
             self.db.refresh(user)
         return user
 
-    def get_or_create(self, username: str) -> tuple[User, bool]:
-        """
-        Get existing user or create new one.
+    def email_exists(self, email: str) -> bool:
+        """Check if email already exists."""
+        return self.db.query(User).filter(User.email == email).first() is not None
 
-        Returns:
-            tuple: (user, is_new_user)
-        """
-        user = self.get_by_username(username)
-        if user:
-            return user, False
-
-        user = self.create(username)
-        return user, True
+    def username_exists(self, username: str) -> bool:
+        """Check if username already exists."""
+        return self.db.query(User).filter(User.username == username).first() is not None

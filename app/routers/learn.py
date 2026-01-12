@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.dependencies import get_user_id
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.learn import (
     LearnSessionResponse,
     LearnCompleteRequest,
@@ -25,13 +26,13 @@ router = APIRouter(prefix="/api/learn", tags=["learn"])
 
 @router.get("/session", response_model=LearnSessionResponse)
 def get_learn_session(
-    user_id: UUID = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get a learning session with 5 new words."""
     progress_repo = ProgressRepository(db)
     word_repo = WordRepository(db)
-    user_repo = UserRepository(db)
+    user_id = current_user.id
 
     # Check if can learn
     can_learn, reason = progress_repo.can_learn(user_id)
@@ -45,9 +46,8 @@ def get_learn_session(
             exercises=[],
         )
 
-    user = user_repo.get_by_id(user_id)
-    current_level_id = user.current_level_id
-    current_category_id = user.current_category_id
+    current_level_id = current_user.current_level_id
+    current_category_id = current_user.current_category_id
 
     if current_level_id is None or current_category_id is None:
         raise HTTPException(
@@ -160,12 +160,13 @@ def get_learn_session(
 @router.post("/complete", response_model=LearnCompleteResponse)
 def complete_learn(
     request: LearnCompleteRequest,
-    user_id: UUID = Depends(get_user_id),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Complete learning session, move words from P0 to P1."""
     progress_repo = ProgressRepository(db)
     word_repo = WordRepository(db)
+    user_id = current_user.id
 
     now = datetime.now(timezone.utc)
     next_time = get_next_available_time("P1")
@@ -199,20 +200,16 @@ def complete_learn(
         words_moved += 1
         
     # Update User Level/Category Logic
-    # 1. Get user
-    user_repo = UserRepository(db)
-    user = user_repo.get_by_id(user_id)
-    
-    # 2. Get all completed words objects to check their levels
+    # 1. Get all completed words objects to check their levels
     completed_word_ids = [UUID(wid) for wid in request.word_ids]
     completed_words = word_repo.get_by_ids(completed_word_ids)
-    
-    # 3. Find max rank
+
+    # 2. Find max rank
     # Use 0 as default if level/category is missing
     max_level_order = -1
     max_cat_order = -1
-    max_level_id = user.current_level_id
-    max_cat_id = user.current_category_id
+    max_level_id = current_user.current_level_id
+    max_cat_id = current_user.current_category_id
     
     # Helper to get order
     # (Optimized: we could join or pre-fetch, but for 5 words individual lazy loads or small queries are ok)
@@ -235,18 +232,18 @@ def complete_learn(
             max_level_id = w.level.id
             max_cat_id = w.category.id
             
-    # 4. Compare with user current
-    current_level = db.query(WordLevel).filter(WordLevel.id == user.current_level_id).first()
-    current_cat = db.query(WordCategory).filter(WordCategory.id == user.current_category_id).first()
-    
+    # 3. Compare with user current
+    current_level = db.query(WordLevel).filter(WordLevel.id == current_user.current_level_id).first()
+    current_cat = db.query(WordCategory).filter(WordCategory.id == current_user.current_category_id).first()
+
     curr_l_order = current_level.order if current_level else 0
     curr_c_order = current_cat.order if current_cat else 0
-    
+
     if (max_level_order > curr_l_order) or \
        (max_level_order == curr_l_order and max_cat_order > curr_c_order):
         # Update user
-        user.current_level_id = max_level_id
-        user.current_category_id = max_cat_id
+        current_user.current_level_id = max_level_id
+        current_user.current_category_id = max_cat_id
         db.commit()
 
     today_learned = progress_repo.count_today_learned(user_id)
