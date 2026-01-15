@@ -1,15 +1,16 @@
-name: Deploy to Cloud Run (Staging)
+name: Deploy to Cloud Run (Production)
 
 on:
   push:
     branches:
-      - main
+      - production
 
 env:
   PROJECT_ID: coach-ai-vocabulary
   REGION: asia-east1
-  SERVICE_NAME: coach-vocab-api
+  SERVICE_NAME: coach-vocab-api-prod
   REPOSITORY: coach-vocab-repo
+  CLOUD_SQL_CONNECTION: coach-ai-vocabulary:asia-east1:coach-vocab-db-prod
 
 jobs:
   deploy:
@@ -47,15 +48,15 @@ jobs:
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --add-cloudsql-instances ${{ secrets.CLOUD_SQL_CONNECTION_NAME }} \
-            --set-env-vars "DB_HOST=${{ secrets.CLOUD_SQL_CONNECTION_NAME }}" \
+            --add-cloudsql-instances ${{ env.CLOUD_SQL_CONNECTION }} \
+            --set-env-vars "DB_HOST=${{ env.CLOUD_SQL_CONNECTION }}" \
             --set-env-vars "DB_NAME=coach_vocabulary" \
             --set-env-vars "DB_USER=coach_user" \
-            --set-env-vars "STATIC_BASE_URL=https://storage.googleapis.com/coach-vocab-static" \
+            --set-env-vars "STATIC_BASE_URL=https://storage.googleapis.com/coach-vocab-static-prod" \
             --set-env-vars "DEBUG=false" \
-            --set-secrets "DB_PASSWORD=db-password:latest" \
-            --set-secrets "JWT_SECRET_KEY=jwt-secret-key:latest" \
-            --min-instances 0 \
+            --set-secrets "DB_PASSWORD=db-password-prod:latest" \
+            --set-secrets "JWT_SECRET_KEY=jwt-secret-key-prod:latest" \
+            --min-instances 1 \
             --max-instances 10 \
             --memory 512Mi \
             --cpu 1 \
