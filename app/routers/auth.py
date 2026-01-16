@@ -10,6 +10,8 @@ from app.schemas.auth import (
     LoginRequest,
     LoginResponse,
     UserResponse,
+    DeleteAccountRequest,
+    DeleteAccountResponse,
 )
 from app.repositories.user_repository import UserRepository
 from app.utils.security import verify_password, get_password_hash, create_access_token
@@ -29,18 +31,11 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
     """
     user_repo = UserRepository(db)
 
-    # Check if email already exists
+    # Check if email already exists (among active users)
     if user_repo.email_exists(request.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
-        )
-
-    # Check if username already exists
-    if user_repo.username_exists(request.username):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already taken"
         )
 
     # Create user
@@ -74,10 +69,10 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     """
     user_repo = UserRepository(db)
 
-    # Find user
+    # Find active user (deleted accounts are treated as non-existent)
     user = user_repo.get_by_email(request.email)
 
-    if not user:
+    if not user or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
@@ -90,13 +85,6 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
             headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    # Check if user is active
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User account is disabled"
         )
 
     # Generate token
@@ -126,4 +114,42 @@ def get_me(current_user: User = Depends(get_current_user)):
         is_active=current_user.is_active,
         current_level_id=current_user.current_level_id,
         current_category_id=current_user.current_category_id
+    )
+
+
+@router.delete("/me", response_model=DeleteAccountResponse)
+def delete_account(
+    request: DeleteAccountRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete (soft delete) the current user's account.
+
+    - Requires email confirmation (user must enter their email correctly)
+    - Sets is_active=False (soft delete)
+    - User's email becomes available for new registrations
+    - User's data is preserved but inaccessible
+    - User will be logged out (token becomes invalid on next request)
+    """
+    # Verify email matches
+    if request.email.lower() != current_user.email.lower():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email does not match"
+        )
+
+    user_repo = UserRepository(db)
+    deleted_user = user_repo.soft_delete(current_user.id)
+
+    if not deleted_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    return DeleteAccountResponse(
+        success=True,
+        message="Account successfully deleted",
+        deleted_at=deleted_user.deleted_at
     )

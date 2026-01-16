@@ -48,15 +48,20 @@ def root():
 def health_check():
     current_time = datetime.utcnow().isoformat() + "Z"
 
-    # Get current migration version from database
     try:
         with SessionLocal() as session:
+            # Get current migration version
             result = session.execute(text("SELECT version_num FROM alembic_version LIMIT 1"))
             migration_version = result.scalar()
+            # Get word count
+            result = session.execute(text("SELECT COUNT(*) FROM words"))
+            word_count = result.scalar()
     except Exception:
         migration_version = "unknown"
+        word_count = "unknown"
 
     return {
         "timestamp": current_time,
-        "db_migration_version": migration_version
+        "db_migration_version": migration_version,
+        "word_count": word_count
     }

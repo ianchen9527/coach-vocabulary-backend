@@ -1,6 +1,7 @@
-from sqlalchemy import String, Integer, ForeignKey, Boolean
+from sqlalchemy import String, Integer, ForeignKey, Boolean, DateTime, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING, Optional
+from datetime import datetime
 
 from app.models.base import Base, UUIDMixin, TimestampMixin
 
@@ -16,13 +17,11 @@ class User(Base, UUIDMixin, TimestampMixin):
 
     email: Mapped[str] = mapped_column(
         String(255),
-        unique=True,
         nullable=False,
         index=True
     )
     username: Mapped[str] = mapped_column(
         String(50),
-        unique=True,
         nullable=False,
         index=True
     )
@@ -35,6 +34,10 @@ class User(Base, UUIDMixin, TimestampMixin):
         default=True,
         nullable=False
     )
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True
+    )
     current_level_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("word_levels.id"),
         nullable=True
@@ -42,6 +45,17 @@ class User(Base, UUIDMixin, TimestampMixin):
     current_category_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("word_categories.id"),
         nullable=True
+    )
+
+    # Partial unique index: email must be unique only among active users
+    # This allows deleted users' emails to be reused for new registrations
+    __table_args__ = (
+        Index(
+            'ix_users_email_active',
+            'email',
+            unique=True,
+            postgresql_where=(is_active == True)
+        ),
     )
 
     # Relationships

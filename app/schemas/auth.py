@@ -52,3 +52,14 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ============== Delete Account ==============
+class DeleteAccountRequest(BaseModel):
+    email: EmailStr = Field(..., description="User's email for confirmation")
+
+
+class DeleteAccountResponse(BaseModel):
+    success: bool
+    message: str
+    deleted_at: datetime

@@ -1,5 +1,6 @@
 from typing import Optional
 from uuid import UUID
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from app.models.user import User
@@ -42,9 +43,25 @@ class UserRepository:
         return user
 
     def email_exists(self, email: str) -> bool:
-        """Check if email already exists."""
-        return self.db.query(User).filter(User.email == email).first() is not None
+        """Check if email already exists for an active user."""
+        return self.db.query(User).filter(
+            User.email == email,
+            User.is_active == True
+        ).first() is not None
 
-    def username_exists(self, username: str) -> bool:
-        """Check if username already exists."""
-        return self.db.query(User).filter(User.username == username).first() is not None
+    def soft_delete(self, user_id: UUID) -> Optional[User]:
+        """
+        Soft delete a user by setting is_active=False and deleted_at timestamp.
+
+        Returns the user if found and deleted, None otherwise.
+        """
+        user = self.db.query(User).filter(
+            User.id == user_id,
+            User.is_active == True
+        ).first()
+        if user:
+            user.is_active = False
+            user.deleted_at = datetime.now(timezone.utc)
+            self.db.commit()
+            self.db.refresh(user)
+        return user
