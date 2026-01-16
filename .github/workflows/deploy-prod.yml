@@ -10,7 +10,6 @@ env:
   REGION: asia-east1
   SERVICE_NAME: coach-vocab-api-prod
   REPOSITORY: coach-vocab-repo
-  CLOUD_SQL_CONNECTION: coach-ai-vocabulary:asia-east1:coach-vocab-db-prod
 
 jobs:
   deploy:
@@ -33,6 +32,27 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install alembic psycopg2-binary sqlalchemy
+
+      - name: Setup Cloud SQL Proxy
+        run: |
+          curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.0/cloud-sql-proxy.linux.amd64
+          chmod +x cloud-sql-proxy
+
+      - name: Run Database Migrations
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD_PROD }}
+        run: |
+          ./cloud-sql-proxy ${{ secrets.CLOUD_SQL_CONNECTION_NAME_PROD }} --port=5432 &
+          sleep 5
+          DATABASE_URL="postgresql://coach_user:${DB_PASSWORD}@127.0.0.1:5432/coach_vocabulary" alembic upgrade head
+
       - name: Configure Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
@@ -48,8 +68,8 @@ jobs:
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --add-cloudsql-instances ${{ env.CLOUD_SQL_CONNECTION }} \
-            --set-env-vars "DB_HOST=${{ env.CLOUD_SQL_CONNECTION }}" \
+            --add-cloudsql-instances ${{ secrets.CLOUD_SQL_CONNECTION_NAME_PROD }} \
+            --set-env-vars "DB_HOST=${{ secrets.CLOUD_SQL_CONNECTION_NAME_PROD }}" \
             --set-env-vars "DB_NAME=coach_vocabulary" \
             --set-env-vars "DB_USER=coach_user" \
             --set-env-vars "STATIC_BASE_URL=https://storage.googleapis.com/coach-vocab-static-prod" \

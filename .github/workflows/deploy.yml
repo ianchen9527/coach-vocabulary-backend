@@ -32,6 +32,27 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install alembic psycopg2-binary sqlalchemy
+
+      - name: Setup Cloud SQL Proxy
+        run: |
+          curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.0/cloud-sql-proxy.linux.amd64
+          chmod +x cloud-sql-proxy
+
+      - name: Run Database Migrations
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          ./cloud-sql-proxy ${{ secrets.CLOUD_SQL_CONNECTION_NAME }} --port=5432 &
+          sleep 5
+          DATABASE_URL="postgresql://coach_user:${DB_PASSWORD}@127.0.0.1:5432/coach_vocabulary" alembic upgrade head
+
       - name: Configure Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
