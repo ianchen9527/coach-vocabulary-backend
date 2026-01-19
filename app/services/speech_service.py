@@ -1,4 +1,7 @@
-import os
+import io
+import logging
+import struct
+import wave
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Tuple
@@ -8,6 +11,80 @@ from google.cloud import storage
 from google.cloud import speech
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
+
+
+def convert_float32_to_int16(audio_data: bytes, wav_info: dict) -> bytes:
+    """Convert 32-bit float WAV to 16-bit PCM WAV."""
+    try:
+        sample_rate = wav_info["sample_rate"]
+        num_channels = wav_info["channels"]
+
+        # Find the data chunk
+        data_start = audio_data.find(b'data')
+        if data_start == -1:
+            return audio_data
+
+        # Skip 'data' + 4 bytes for chunk size
+        data_start += 8
+        float_data = audio_data[data_start:]
+
+        # Convert float32 samples to int16
+        num_samples = len(float_data) // 4
+        int16_samples = []
+
+        for i in range(num_samples):
+            float_val = struct.unpack('<f', float_data[i*4:(i+1)*4])[0]
+            # Clamp to [-1, 1] and convert to int16
+            float_val = max(-1.0, min(1.0, float_val))
+            int16_val = int(float_val * 32767)
+            int16_samples.append(struct.pack('<h', int16_val))
+
+        int16_data = b''.join(int16_samples)
+
+        # Create new WAV file with PCM format
+        output = io.BytesIO()
+        with wave.open(output, 'wb') as wav_out:
+            wav_out.setnchannels(num_channels)
+            wav_out.setsampwidth(2)  # 16-bit = 2 bytes
+            wav_out.setframerate(sample_rate)
+            wav_out.writeframes(int16_data)
+
+        logger.info(f"Converted float32 to int16: {len(audio_data)} -> {len(output.getvalue())} bytes")
+        return output.getvalue()
+
+    except Exception as e:
+        logger.error(f"Float32 to int16 conversion failed: {e}")
+        return audio_data
+
+
+def get_wav_info(audio_data: bytes) -> dict:
+    """Extract audio info from WAV header."""
+    try:
+        # WAV header structure:
+        # bytes 0-3: "RIFF"
+        # bytes 8-11: "WAVE"
+        # bytes 20-21: audio format (1=PCM, 3=IEEE float)
+        # bytes 22-23: number of channels
+        # bytes 24-27: sample rate
+        # bytes 34-35: bits per sample
+        if len(audio_data) < 36:
+            return {}
+        if audio_data[:4] != b'RIFF' or audio_data[8:12] != b'WAVE':
+            return {}
+        audio_format = struct.unpack('<H', audio_data[20:22])[0]
+        num_channels = struct.unpack('<H', audio_data[22:24])[0]
+        sample_rate = struct.unpack('<I', audio_data[24:28])[0]
+        bits_per_sample = struct.unpack('<H', audio_data[34:36])[0]
+        return {
+            "format": audio_format,  # 1=PCM, 3=IEEE float
+            "channels": num_channels,
+            "sample_rate": sample_rate,
+            "bits_per_sample": bits_per_sample,
+        }
+    except Exception:
+        return {}
 
 
 # Supported audio formats with their Speech-to-Text encoding
@@ -143,13 +220,36 @@ class SpeechService:
 
             audio = speech.RecognitionAudio(content=audio_data)
 
-            # For WAV files, omit sample_rate_hertz to let Google auto-detect from header
+            # For WAV files, extract info from header
             if extension == ".wav":
-                config = speech.RecognitionConfig(
-                    encoding=encoding,
-                    language_code="en-US",
-                    enable_automatic_punctuation=False,
-                )
+                wav_info = get_wav_info(audio_data)
+                logger.info(f"WAV file detected: format={wav_info.get('format')} (1=PCM,3=float), "
+                           f"channels={wav_info.get('channels')}, sample_rate={wav_info.get('sample_rate')}, "
+                           f"bits={wav_info.get('bits_per_sample')}, size={len(audio_data)} bytes")
+
+                # Convert float32 to int16 if needed
+                if wav_info.get("format") == 3:  # IEEE float
+                    audio_data = convert_float32_to_int16(audio_data, wav_info)
+                    audio = speech.RecognitionAudio(content=audio_data)
+
+                sample_rate = wav_info.get("sample_rate")
+                num_channels = wav_info.get("channels", 1)
+
+                if sample_rate:
+                    config = speech.RecognitionConfig(
+                        encoding=encoding,
+                        sample_rate_hertz=sample_rate,
+                        audio_channel_count=num_channels,
+                        language_code="en-US",
+                        enable_automatic_punctuation=False,
+                    )
+                else:
+                    # Fallback: let Google auto-detect
+                    config = speech.RecognitionConfig(
+                        encoding=speech.RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED,
+                        language_code="en-US",
+                        enable_automatic_punctuation=False,
+                    )
             else:
                 config = speech.RecognitionConfig(
                     encoding=encoding,
@@ -158,9 +258,12 @@ class SpeechService:
                     enable_automatic_punctuation=False,
                 )
 
+            logger.info(f"Sending transcription request to Google Speech-to-Text: encoding={config.encoding}, sample_rate={config.sample_rate_hertz}, language={config.language_code}")
+
             response = self.speech_client.recognize(config=config, audio=audio)
 
             if not response.results:
+                logger.info("Transcription complete: no speech detected")
                 return "", None  # No speech detected
 
             # Concatenate all transcript results
@@ -170,9 +273,11 @@ class SpeechService:
                 if result.alternatives
             )
 
+            logger.info(f"Transcription complete: '{transcript}'")
             return transcript.strip(), None
 
         except Exception as e:
+            logger.error(f"Google Speech-to-Text API error: {str(e)}")
             return None, f"Transcription failed: {str(e)}"
 
 
