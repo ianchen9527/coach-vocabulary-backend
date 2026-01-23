@@ -49,6 +49,7 @@ class UserResponse(BaseModel):
     is_active: bool
     current_level_id: Optional[int] = None
     current_category_id: Optional[int] = None
+    vocabulary_tutorial_completed_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

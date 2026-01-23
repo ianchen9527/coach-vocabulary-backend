@@ -39,6 +39,10 @@ class User(Base, UUIDMixin, TimestampMixin):
         DateTime(timezone=True),
         nullable=True
     )
+    vocabulary_tutorial_completed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True
+    )
     current_level_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("word_levels.id"),
         nullable=True

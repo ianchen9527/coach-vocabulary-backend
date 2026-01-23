@@ -113,7 +113,8 @@ def get_me(current_user: User = Depends(get_current_user)):
         created_at=current_user.created_at,
         is_active=current_user.is_active,
         current_level_id=current_user.current_level_id,
-        current_category_id=current_user.current_category_id
+        current_category_id=current_user.current_category_id,
+        vocabulary_tutorial_completed_at=current_user.vocabulary_tutorial_completed_at
     )
 
 
