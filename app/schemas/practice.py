@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
 
@@ -24,3 +25,4 @@ class PracticeSubmitResponse(BaseModel):
     success: bool
     results: List[AnswerResultSchema]
     summary: PracticeSummary
+    next_available_time: Optional[datetime] = None

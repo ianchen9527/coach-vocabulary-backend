@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
 
@@ -20,3 +21,4 @@ class LearnCompleteResponse(BaseModel):
     success: bool
     words_moved: int
     today_learned: int
+    next_available_time: Optional[datetime] = None

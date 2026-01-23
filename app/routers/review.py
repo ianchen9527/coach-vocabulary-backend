@@ -107,7 +107,6 @@ def complete_review(
 
     now = datetime.now(timezone.utc)
     words_completed = 0
-    next_practice_time = None
 
     # Build word_id to pool mapping for answer history
     word_id_to_info = {}
@@ -143,8 +142,6 @@ def complete_review(
         )
 
         words_completed += 1
-        if next_practice_time is None:
-            next_practice_time = next_time
 
     # Record answer history for review_learn
     answer_records = []
@@ -164,8 +161,16 @@ def complete_review(
     if answer_records:
         answer_history_repo.create_answers_batch(answer_records)
 
+    # Only return next_available_time when all actions are unavailable
+    next_available_time = None
+    can_learn, _ = progress_repo.can_learn(user_id)
+    can_practice, _ = progress_repo.can_practice(user_id)
+    can_review, _ = progress_repo.can_review(user_id)
+    if not can_learn and not can_practice and not can_review:
+        next_available_time = progress_repo.get_next_available_time(user_id)
+
     return ReviewCompleteResponse(
         success=True,
         words_completed=words_completed,
-        next_practice_time=next_practice_time,
+        next_available_time=next_available_time,
     )

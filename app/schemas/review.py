@@ -24,4 +24,4 @@ class ReviewCompleteRequest(BaseModel):
 class ReviewCompleteResponse(BaseModel):
     success: bool
     words_completed: int
-    next_practice_time: datetime
+    next_available_time: Optional[datetime] = None

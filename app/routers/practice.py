@@ -182,6 +182,14 @@ def submit_practice(
     if answer_records:
         answer_history_repo.create_answers_batch(answer_records)
 
+    # Only return next_available_time when all actions are unavailable
+    next_available_time = None
+    can_learn, _ = progress_repo.can_learn(user_id)
+    can_practice, _ = progress_repo.can_practice(user_id)
+    can_review, _ = progress_repo.can_review(user_id)
+    if not can_learn and not can_practice and not can_review:
+        next_available_time = progress_repo.get_next_available_time(user_id)
+
     return PracticeSubmitResponse(
         success=True,
         results=results,
@@ -189,4 +197,5 @@ def submit_practice(
             correct_count=correct_count,
             incorrect_count=incorrect_count,
         ),
+        next_available_time=next_available_time,
     )

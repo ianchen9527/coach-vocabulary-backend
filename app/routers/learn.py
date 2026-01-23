@@ -274,8 +274,17 @@ def complete_learn(
 
     today_learned = progress_repo.count_today_learned(user_id)
 
+    # Only return next_available_time when all actions are unavailable
+    next_available_time = None
+    can_learn, _ = progress_repo.can_learn(user_id)
+    can_practice, _ = progress_repo.can_practice(user_id)
+    can_review, _ = progress_repo.can_review(user_id)
+    if not can_learn and not can_practice and not can_review:
+        next_available_time = progress_repo.get_next_available_time(user_id)
+
     return LearnCompleteResponse(
         success=True,
         words_moved=words_moved,
         today_learned=today_learned,
+        next_available_time=next_available_time,
     )
