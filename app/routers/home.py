@@ -5,6 +5,7 @@ from app.database import get_db
 from app.dependencies import get_current_user
 from app.models.user import User
 from app.schemas.home import StatsResponse, WordPoolResponse, WordPoolItem
+from app.repositories.answer_history_repository import AnswerHistoryRepository
 from app.repositories.progress_repository import ProgressRepository
 from app.repositories.word_repository import WordRepository
 
@@ -18,9 +19,11 @@ def get_stats(
 ):
     """Get home page statistics."""
     progress_repo = ProgressRepository(db)
+    answer_history_repo = AnswerHistoryRepository(db)
     user_id = current_user.id
 
     today_learned = progress_repo.count_today_learned(user_id)
+    today_completed = answer_history_repo.count_today_completed(user_id)
     # Include both P pool practice and R pool practice phase
     available_practice = (
         progress_repo.count_available_practice(user_id) +
@@ -39,6 +42,7 @@ def get_stats(
 
     return StatsResponse(
         today_learned=today_learned,
+        today_completed=today_completed,
         available_practice=available_practice,
         available_review=available_review,
         upcoming_24h=upcoming_24h,

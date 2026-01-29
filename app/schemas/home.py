@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class StatsResponse(BaseModel):
     today_learned: int
+    today_completed: int
     available_practice: int
     available_review: int
     upcoming_24h: int
